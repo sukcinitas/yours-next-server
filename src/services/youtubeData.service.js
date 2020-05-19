@@ -1,19 +1,36 @@
 const axios = require('axios');
 
 const key = process.env.GOOGLE_API_KEY;
-
+// delete defaults later
 const YoutubeDataService = {
-  search(phrase = 'bebin', pageToken) {
-    return axios.get(`https://www.googleapis.com/youtube/v3/search?&part=snippet&type=video&q=${phrase}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+  async search(phrase = 'bebin', pageToken) {
+    try {
+      return await axios.get(`https://www.googleapis.com/youtube/v3/search?&part=snippet&type=video&q=${phrase}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+    } catch(err) {
+      console.error(err);
+    }
   },
-  getPlaylists(channelId = 'UCazpYHBPTXKy9t9E78yuWnQ', pageToken) {
-    return axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=${channelId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+  async getPlaylists(channelId = 'UCazpYHBPTXKy9t9E78yuWnQ', pageToken) {
+    try {
+      return await axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=${channelId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+    } catch(err) {
+      console.error(err);
+    }
   },
   async getPlaylistItems(playlistId = 'PLcCyuE3mscVGB_LflsnXjliFKms77apx0', pageToken) {
-    return axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?&part=snippet&playlistId=${playlistId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+    try {
+      return await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?&part=snippet&playlistId=${playlistId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
+    } catch(err) {
+      console.error(err);
+    }
   },
-  getVideos(idList, pageToken) {
-    return axios.get(`https://www.googleapis.com/youtube/v3/videos?&part=snippet&id=${idList}&maxResults=10&key=${key}&pageToken${pageToken}`);
+  // idList format is id separated by commas
+  async getVideos(idList, pageToken) {
+    try {
+      return await axios.get(`https://www.googleapis.com/youtube/v3/videos?&part=snippet&id=${idList}&maxResults=10&key=${key}&pageToken${pageToken}`);
+    } catch(err) {
+      console.error(err);
+    }
   },
 };
 
