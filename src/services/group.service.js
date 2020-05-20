@@ -10,16 +10,24 @@ const GroupService = {
       await newGroup.save();
       return 'Group has been successfully saved!';
     } catch (err) {
-      return err;
+      throw Error(err);
     }
   },
   async checkIfGroupExists(name) {
     try {
-      const group = await Group.findOne({ name }, '-password -playlists');
+      const group = await Group.findOne({ name }, '-password');
       if (group) { return true; }
       return false;
     } catch (err) {
-      return err;
+      throw Error(err);
+    }
+  },
+  async getGroupInfo(name) {
+    try {
+      const group = await Group.findOne({ name });
+      return group;
+    } catch (err) {
+      throw Error(err);
     }
   },
 };
