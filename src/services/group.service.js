@@ -1,7 +1,7 @@
 const Group = require('../models/group.model');
 
 const GroupService = {
-  createGroup(name, password) {
+  async createGroup(name, password) {
     try {
       const newGroup = new Group({
         name,
@@ -10,16 +10,16 @@ const GroupService = {
       await newGroup.save();
       return 'Group has been successfully saved!';
     } catch (err) {
-      console.error(err);
+      return err;
     }
   },
   async checkIfGroupExists(name) {
     try {
-      const group = await Group.findOne({ name }, -password -playlists);
-      if (group) { return true ;}
+      const group = await Group.findOne({ name }, '-password -playlists');
+      if (group) { return true; }
       return false;
-    } catch(err) {
-      console.error(err);
+    } catch (err) {
+      return err;
     }
   },
 };

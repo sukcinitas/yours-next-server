@@ -19,7 +19,7 @@ const YoutubeDataController = {
     const { data } = await YoutubeDataService.getPlaylistItems(playlistId, pageToken);
     return res.json({ data });
   },
-  async getVideos(req, res)  {
+  async getVideos(req, res) {
     const { idList } = req.query;
     const pageToken = req.query.pageToken || '';
     const { data } = await YoutubeDataService.getVideos(idList, pageToken);

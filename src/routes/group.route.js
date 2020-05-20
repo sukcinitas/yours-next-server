@@ -1,7 +1,6 @@
-// const app = require('express')Router();
+const router = require('express').Router();
+const GroupControlerr = require('../controllers/group.controller');
 
-// app.post('', async (req, res) => {
+router.post('/create', GroupControlerr.createGroup);
 
-// });
-
-// modules.exports = app;
+module.exports = router;

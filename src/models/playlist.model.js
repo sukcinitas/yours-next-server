@@ -1,11 +1,11 @@
-const mongoose, { Schema } = require('mongoose');
+const mongoose = require('mongoose');
 
-const playlistSchema = new Schema({
-  name: {
+const playlistSchema = new mongoose.Schema({
+  title: {
     type: String,
     required: true,
     unique: true,
-    trim: true, 
+    trim: true,
     minlength: 3,
     maxlength: 20,
   },
@@ -13,7 +13,7 @@ const playlistSchema = new Schema({
   createdBy: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const Playlist = mongoose.model('playlist', playlistSchema);

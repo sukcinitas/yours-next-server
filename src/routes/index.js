@@ -6,7 +6,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/data', require('./data.route'));
-// app.use('/group', require('./group.route'));
+app.use('/group', require('./group.route'));
+app.use('/playlists', require('./playlist.route'));
 
 app.all('*', (req, res) => {
   res.status(404).send({ msg: 'Not found' });

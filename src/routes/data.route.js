@@ -14,5 +14,3 @@ router.get('/playlistItems', YoutubeDataController.getPlaylistItems);
 router.get('/videos', YoutubeDataController.getVideos);
 
 module.exports = router;
-
-
