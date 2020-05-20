@@ -40,8 +40,8 @@ const PlaylistService = {
   },
   async updatePlaylist(id, item) {
     try {
-      const playlist = await Playlist.update({ _id: id }, { $push: { items: item } });
-      return playlist;
+      await Playlist.updateOne({ _id: id }, { $push: { items: item } });
+      return;
     } catch (err) {
       throw Error(err.errmsg);
     }

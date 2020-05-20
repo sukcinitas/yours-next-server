@@ -41,7 +41,8 @@ const PlaylistController = {
     try {
       const { id } = req.params;
       const { item } = req.body;
-      const playlist = await PlaylistService.getPlaylist(id, item);
+      await PlaylistService.updatePlaylist(id, item);
+      const playlist = await PlaylistService.getPlaylist(id);
       return res.json({ success: true, playlist });
     } catch (err) {
       return res.json({ sucess: false, message: 'Could not update playlist!' });
