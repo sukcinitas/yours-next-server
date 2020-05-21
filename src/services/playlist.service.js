@@ -27,7 +27,7 @@ const PlaylistService = {
       await newPlaylist.save();
       return 'Playlist has been successfully saved!';
     } catch (err) {
-      throw Error(err.message);
+      throw Error(err.errmsg);
     }
   },
   async deletePlaylist(id) {

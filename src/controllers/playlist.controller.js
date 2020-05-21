@@ -25,7 +25,7 @@ const PlaylistController = {
       await PlaylistService.createPlaylist(title, createdBy);
       return res.json({ success: true, message: 'Playlist has been successfully created!' });
     } catch (err) {
-      return res.json({ sucess: false, message: 'Could not create playlist!' });
+      return res.json({ success: false, message: 'Could not create playlist!' });
     }
   },
   async deletePlaylist(req, res) {
