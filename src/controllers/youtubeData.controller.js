@@ -8,7 +8,7 @@ const YoutubeDataController = {
       const { data } = await YoutubeDataService.search(q, pageToken);
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({ success: false, message: 'Could not get results!' });
+      return res.json({ success: false, message: 'Could not get results!', error: err.message });
     }
   },
   async getPlaylists(req, res) {
@@ -18,7 +18,7 @@ const YoutubeDataController = {
       const { data } = await YoutubeDataService.getPlaylists(channelId, pageToken);
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({ success: false, message: 'Could not get results!' });
+      return res.json({ success: false, message: 'Could not get results!', error: err.message });
     }
   },
   async getPlaylistItems(req, res) {
@@ -28,7 +28,7 @@ const YoutubeDataController = {
       const { data } = await YoutubeDataService.getPlaylistItems(playlistId, pageToken);
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({ success: false, message: 'Could not get results!' });
+      return res.json({ success: false, message: 'Could not get results!', error: err.message });
     }
   },
   async getVideos(req, res) {
@@ -38,7 +38,7 @@ const YoutubeDataController = {
       const { data } = await YoutubeDataService.getVideos(idList, pageToken);
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({ success: false, message: 'Could not get results!' });
+      return res.json({ success: false, message: 'Could not get results!', error: err.message });
     }
   },
 };
