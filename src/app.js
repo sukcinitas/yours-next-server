@@ -1,11 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
 
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
 
 app.use(express.json());
 app.use(cors());
@@ -18,23 +14,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const uri = process.env.MONGODB_URI;
-mongoose.connect(uri,
-  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-const { connection } = mongoose;
-connection.once('open', () => {
-  // eslint-disable-next-line no-console
-  console.log('Connection with MongoDB database established');
+app.get('/', (req, res) => {
+  res.send('Welcome to home page!');
 });
 
 app.use('/api', require('./routes'));
 
-io.on('connection', (socket) => {
-  // eslint-disable-next-line no-console
-  console.log('a user connected', socket);
+app.all('*', (req, res) => {
+  res.status(404).send('Not found!');
 });
 
-http.listen(process.env.PORT || 8081, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server is running on port 8081, sweetheart!');
-});
+module.exports = app;

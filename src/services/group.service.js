@@ -1,33 +1,33 @@
 const Group = require('../models/group.model');
 
 const GroupService = {
-  async createGroup(name, password) {
+  async createGroup(name, passcode) {
     try {
       const newGroup = new Group({
         name,
-        password,
+        passcode,
       });
       await newGroup.save();
-      return 'Group has been successfully saved!';
+      return;
     } catch (err) {
-      throw Error(err);
+      throw Error(err.message);
     }
   },
   async checkIfGroupExists(name) {
     try {
-      const group = await Group.findOne({ name }, '-password');
+      const group = await Group.findOne({ name }, '-passcode').exec();
       if (group) { return true; }
       return false;
     } catch (err) {
-      throw Error(err);
+      throw Error(err.message);
     }
   },
   async getGroupInfo(name) {
     try {
-      const group = await Group.findOne({ name });
+      const group = await Group.findOne({ name }).exec();
       return group;
     } catch (err) {
-      throw Error(err);
+      throw Error(err.message);
     }
   },
 };

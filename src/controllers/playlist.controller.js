@@ -7,7 +7,7 @@ const PlaylistController = {
       const playlists = await PlaylistService.getPlaylists(createdBy);
       return res.json({ success: true, playlists });
     } catch (err) {
-      return res.json({ sucess: false, message: 'Could not get playlists!' });
+      return res.json({ success: false, message: 'Could not get playlists!', error: err.message });
     }
   },
   async getPlaylist(req, res) {
@@ -16,7 +16,7 @@ const PlaylistController = {
       const playlist = await PlaylistService.getPlaylist(id);
       return res.json({ success: true, playlist });
     } catch (err) {
-      return res.json({ sucess: false, message: 'Could not get playlist!' });
+      return res.json({ success: false, message: 'Could not get playlist!', error: err.message });
     }
   },
   async createPlaylist(req, res) {
@@ -25,7 +25,7 @@ const PlaylistController = {
       await PlaylistService.createPlaylist(title, createdBy);
       return res.json({ success: true, message: 'Playlist has been successfully created!' });
     } catch (err) {
-      return res.json({ success: false, message: 'Could not create playlist!' });
+      return res.json({ success: false, message: 'Could not create playlist!', error: err.message });
     }
   },
   async deletePlaylist(req, res) {
@@ -34,18 +34,21 @@ const PlaylistController = {
       await PlaylistService.deletePlaylist(id);
       return res.json({ success: true, message: 'Playlist has been successfully deleted!' });
     } catch (err) {
-      return res.json({ sucess: false, message: 'Could not delete playlist!' });
+      return res.json({ success: false, message: 'Could not delete playlist!', error: err.message });
     }
   },
   async updatePlaylist(req, res) {
     try {
       const { id } = req.params;
       const { item } = req.body;
+      if (!item) {
+        return res.json({ success: false, message: 'Could not update playlist!' }); 
+      }
       await PlaylistService.updatePlaylist(id, item);
       const playlist = await PlaylistService.getPlaylist(id);
       return res.json({ success: true, playlist });
     } catch (err) {
-      return res.json({ sucess: false, message: 'Could not update playlist!' });
+      return res.json({ success: false, message: 'Could not update playlist!', error: err.message });
     }
   },
 };
