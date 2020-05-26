@@ -17,7 +17,7 @@ const PlaylistService = {
       throw Error(err.message);
     }
   },
-  async createPlaylist(title, createdBy) {
+  async createPlaylist({ title, createdBy }) {
     try {
       const newPlaylist = new Playlist({
         title,
@@ -38,7 +38,7 @@ const PlaylistService = {
       throw Error(err.message);
     }
   },
-  async updatePlaylist(id, item) {
+  async updatePlaylist({ id, item }) {
     try {
       await Playlist.updateOne({ _id: id }, { $push: { items: item } }).exec();
       return;

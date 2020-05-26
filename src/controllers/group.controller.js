@@ -16,7 +16,7 @@ const GroupController = {
           message: 'Name is already in use!',
         });
       }
-      await GroupService.createGroup(name, passcode);
+      await GroupService.createGroup({ name, passcode });
       return res.json({
         success: true,
         message: 'Group has been successfully created!',

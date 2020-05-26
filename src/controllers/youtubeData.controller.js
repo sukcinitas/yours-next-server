@@ -5,7 +5,7 @@ const YoutubeDataController = {
     try {
       const { q } = req.query;
       const pageToken = req.query.pageToken || ''; // undefined is falsey
-      const { data } = await YoutubeDataService.search(q, pageToken);
+      const { data } = await YoutubeDataService.search({ q, pageToken });
       return res.json({ success: true, data });
     } catch (err) {
       return res.json({ success: false, message: 'Could not get results!', error: err.message });
@@ -15,7 +15,7 @@ const YoutubeDataController = {
     try {
       const { channelId } = req.query;
       const pageToken = req.query.pageToken || '';
-      const { data } = await YoutubeDataService.getPlaylists(channelId, pageToken);
+      const { data } = await YoutubeDataService.getPlaylists({ channelId, pageToken });
       return res.json({ success: true, data });
     } catch (err) {
       return res.json({ success: false, message: 'Could not get results!', error: err.message });
@@ -25,7 +25,7 @@ const YoutubeDataController = {
     try {
       const { playlistId } = req.query;
       const pageToken = req.query.pageToken || '';
-      const { data } = await YoutubeDataService.getPlaylistItems(playlistId, pageToken);
+      const { data } = await YoutubeDataService.getPlaylistItems({ playlistId, pageToken });
       return res.json({ success: true, data });
     } catch (err) {
       return res.json({ success: false, message: 'Could not get results!', error: err.message });
@@ -35,7 +35,7 @@ const YoutubeDataController = {
     try {
       const { idList } = req.query;
       const pageToken = req.query.pageToken || '';
-      const { data } = await YoutubeDataService.getVideos(idList, pageToken);
+      const { data } = await YoutubeDataService.getVideos({ idList, pageToken });
       return res.json({ success: true, data });
     } catch (err) {
       return res.json({ success: false, message: 'Could not get results!', error: err.message });

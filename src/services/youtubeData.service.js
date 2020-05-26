@@ -4,21 +4,21 @@ require('dotenv').config();
 const key = process.env.GOOGLE_API_KEY;
 // delete defaults later
 const YoutubeDataService = {
-  async search(phrase, pageToken) {
+  async search({ phrase, pageToken }) {
     try {
       return await axios.get(`https://www.googleapis.com/youtube/v3/search?&part=snippet&type=video&q=${phrase}&maxResults=10&key=${key}&pageToken=${pageToken}`);
     } catch (err) {
       throw Error(err.message);
     }
   },
-  async getPlaylists(channelId = 'UCazpYHBPTXKy9t9E78yuWnQ', pageToken) {
+  async getPlaylists({ channelId, pageToken }) {
     try {
       return await axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&channelId=${channelId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
     } catch (err) {
       throw Error(err.message);
     }
   },
-  async getPlaylistItems(playlistId = 'PLcCyuE3mscVGB_LflsnXjliFKms77apx0', pageToken) {
+  async getPlaylistItems({ playlistId, pageToken }) {
     try {
       return await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?&part=snippet&playlistId=${playlistId}&maxResults=10&key=${key}&pageToken=${pageToken}`);
     } catch (err) {
@@ -26,7 +26,7 @@ const YoutubeDataService = {
     }
   },
   // idList format is id separated by commas
-  async getVideos(idList, pageToken) {
+  async getVideos({ idList, pageToken }) {
     try {
       return await axios.get(`https://www.googleapis.com/youtube/v3/videos?&part=snippet&id=${idList}&maxResults=10&key=${key}&pageToken${pageToken}`);
     } catch (err) {

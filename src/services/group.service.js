@@ -1,7 +1,7 @@
 const Group = require('../models/group.model');
 
 const GroupService = {
-  async createGroup(name, passcode) {
+  async createGroup({ name, passcode }) {
     try {
       const newGroup = new Group({
         name,

@@ -22,7 +22,7 @@ const PlaylistController = {
   async createPlaylist(req, res) {
     try {
       const { title, createdBy } = req.body;
-      await PlaylistService.createPlaylist(title, createdBy);
+      await PlaylistService.createPlaylist({ title, createdBy });
       return res.json({ success: true, message: 'Playlist has been successfully created!' });
     } catch (err) {
       return res.json({ success: false, message: 'Could not create playlist!', error: err.message });
@@ -44,7 +44,7 @@ const PlaylistController = {
       if (!item) {
         return res.json({ success: false, message: 'Could not update playlist!' }); 
       }
-      await PlaylistService.updatePlaylist(id, item);
+      await PlaylistService.updatePlaylist({ id, item });
       const playlist = await PlaylistService.getPlaylist(id);
       return res.json({ success: true, playlist });
     } catch (err) {
