@@ -8,7 +8,8 @@
     "start": "node ./src/server.js",
     "client": "npm run start --prefix ../client",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
-    "test": "jest --detectOpenHandles --runInBand"
+    "test-apis": "jest --detectOpenHandles --runInBand ./src/__tests__/apis",
+    "test-unit": "jest --detectOpenHandles --runInBand ./src/__tests__/unit"
   },
   "jest": {
     "testEnvironment": "node",

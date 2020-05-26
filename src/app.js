@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Welcome to home page!');
+  res.send('Welcome to the home page!');
 });
 
 app.use('/api', require('./routes'));
