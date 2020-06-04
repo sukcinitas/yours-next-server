@@ -25,7 +25,7 @@ const PlaylistService = {
         items: [],
       });
       await newPlaylist.save();
-      return 'Playlist has been successfully saved!';
+      return newPlaylist;
     } catch (err) {
       throw Error(err.message);
     }
@@ -42,6 +42,17 @@ const PlaylistService = {
     try {
       await Playlist.updateOne({ _id: id }, { $push: { items: item } }).exec();
       return;
+    } catch (err) {
+      throw Error(err.message);
+    }
+  },
+  async removeItemFromPlaylist({ id, item }) {
+    try {
+      const playlist = await Playlist.findById(id).exec();
+      const newItems = playlist.items.filter(video => video !== item);
+      playlist.items = newItems;
+      await playlist.save();
+      return 'Item has been successfully deleted!';
     } catch (err) {
       throw Error(err.message);
     }

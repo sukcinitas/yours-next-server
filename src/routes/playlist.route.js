@@ -11,4 +11,7 @@ router.route('/:id')
   .delete(PlaylistController.deletePlaylist)
   .put(PlaylistController.updatePlaylist);
 
+router.route('/:id/removeItem')
+  .put(PlaylistController.removeItemFromPlaylist);
+  
 module.exports = router;

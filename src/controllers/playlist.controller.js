@@ -22,8 +22,8 @@ const PlaylistController = {
   async createPlaylist(req, res) {
     try {
       const { title, createdBy } = req.body;
-      await PlaylistService.createPlaylist({ title, createdBy });
-      return res.json({ success: true, message: 'Playlist has been successfully created!' });
+      const playlist = await PlaylistService.createPlaylist({ title, createdBy });
+      return res.json({ success: true, playlist, message: 'Playlist has been successfully created!' });
     } catch (err) {
       return res.json({ success: false, message: 'Could not create playlist!', error: err.message });
     }
@@ -51,6 +51,19 @@ const PlaylistController = {
       return res.json({ success: false, message: 'Could not update playlist!', error: err.message });
     }
   },
+  async removeItemFromPlaylist(req, res) {
+    try {
+      const { id } = req.params;
+      const { item } = req.body;
+      if (!item) {
+        return res.json({ success: false, message: 'Could not delete playlist item!' }); 
+      }
+      await PlaylistService.removeItemFromPlaylist({ id, item });
+      return res.json({ success: true, message: 'Item has been successfully deleted!' });
+    } catch (err) {
+      return res.json({ success: false, message: 'Could note delete playlist item!', error: err.message});
+    }
+  }
 };
 
 module.exports = PlaylistController;

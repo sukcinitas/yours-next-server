@@ -4,8 +4,9 @@ const YoutubeDataController = {
   async search(req, res) {
     try {
       const { q } = req.query;
+      console.log(q);
       const pageToken = req.query.pageToken || ''; // undefined is falsey
-      const { data } = await YoutubeDataService.search({ q, pageToken });
+      const { data } = await YoutubeDataService.search({ phrase: q, pageToken });
       return res.json({ success: true, data });
     } catch (err) {
       return res.json({ success: false, message: 'Could not get results!', error: err.message });
