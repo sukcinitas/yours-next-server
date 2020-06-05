@@ -16,7 +16,7 @@ beforeAll(async () => {
   });
   await Playlist.create({
     title: 'Title',
-    items: ['videoId'],
+    items: ['videoId', 'videoId3'],
     createdBy: 'name',
   });
 });
@@ -32,7 +32,7 @@ describe('Test the /api/playlists path', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body.playlists[0]).toHaveProperty('_id');
-    expect(response.body.playlists[0]).toHaveProperty('items', ['videoId']);
+    expect(response.body.playlists[0]).toHaveProperty('items', ['videoId', 'videoId3']);
     expect(response.body.playlists).toHaveLength(1);
     expect(response.body.playlists[0].createdBy).toBe('name');
     expect(response.body.playlists[0].title).toBe('Title');
@@ -50,6 +50,32 @@ describe('Test the /api/playlists path', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Could not create playlist!');
+  });
+});
+
+describe('Test the /api/playlists/:id/removeItem path', () => {
+  // const id = (await Playlist.find({ createdBy: 'name' }))[0]._id;
+  test('It should send a response to the PUT method, when unsuccessful', async () => {
+    const response = await request(app).put(`/api/playlists/0/removeItem`).send({ items: ['videoId3'] });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'Could not delete playlist item(s)!');
+  });
+
+  test('It should send a response to the PUT method, when no items to delete are send', async () => {
+    const id = (await Playlist.find({ title: 'Title' }))[0]._id;
+    const response = await request(app).put(`/api/playlists/${id}/removeItem`).send({ items: [] });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'No item(s) to delete!');
+  });
+
+  test('It should send a response to the PUT method, when successful', async () => {
+    const id = (await Playlist.find({ title: 'Title' }))[0]._id;
+    const response = await request(app).put(`/api/playlists/${id}/removeItem`).send({ items: ['videoId3'] });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('message', 'Item(s) has been successfully deleted!');
   });
 });
 
@@ -107,4 +133,3 @@ describe('Test the /api/playlists/:id path', () => {
     expect(response.body).toHaveProperty('message', 'Could not delete playlist!');
   });
 });
-

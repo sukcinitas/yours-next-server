@@ -54,14 +54,14 @@ const PlaylistController = {
   async removeItemFromPlaylist(req, res) {
     try {
       const { id } = req.params;
-      const { item } = req.body;
-      if (!item) {
-        return res.json({ success: false, message: 'Could not delete playlist item!' }); 
+      const { items } = req.body;
+      if (items.length === 0) {
+        return res.json({ success: false, message: 'No item(s) to delete!' }); 
       }
-      await PlaylistService.removeItemFromPlaylist({ id, item });
-      return res.json({ success: true, message: 'Item has been successfully deleted!' });
+      await PlaylistService.removeItemFromPlaylist({ id, items });
+      return res.json({ success: true, message: 'Item(s) has been successfully deleted!' });
     } catch (err) {
-      return res.json({ success: false, message: 'Could note delete playlist item!', error: err.message});
+      return res.json({ success: false, message: 'Could not delete playlist item(s)!', error: err.message});
     }
   }
 };

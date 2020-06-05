@@ -46,10 +46,13 @@ const PlaylistService = {
       throw Error(err.message);
     }
   },
-  async removeItemFromPlaylist({ id, item }) {
+  async removeItemFromPlaylist({ id, items }) {
     try {
       const playlist = await Playlist.findById(id).exec();
-      const newItems = playlist.items.filter(video => video !== item);
+      let newItems = playlist.items;
+      for (let i = 0; i < items.length; i++) {
+        newItems = newItems.filter(video => video !== items[i]);
+      }
       playlist.items = newItems;
       await playlist.save();
       return 'Item has been successfully deleted!';
