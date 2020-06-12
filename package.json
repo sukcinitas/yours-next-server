@@ -10,7 +10,7 @@
     "lint": "./node_modules/.bin/eslint src/*.js",
     "start": "node ./src/server.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "client": "cd client && npm run start",
+    "client": "cd ../client && npm run start",
     "prod-client": "cd client && npm run build",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
     "prod": "npm run prod-client && npm run start",
