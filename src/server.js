@@ -35,10 +35,10 @@ io.on('connection', (socket) => {
   // I only set member in sender
   socket.on('setMember', (data) => {
     client = data;
-    socket.to(group).emit('setMember', data);
+    socket.emit('setMember', data);
   });
   socket.on('disconnect', () => {
-    activeMembers = active.Members.filter(member => member.name !== client.name );
+    activeMembers = activeMembers.filter(member => member.name !== client.name );
     io.sockets.in(group).emit('removeMember', client);
   });
 });
