@@ -1,10 +1,12 @@
+/* eslint-disable no-console */
 const mongoose = require('mongoose');
 const http = require('http');
+const socketIO = require('socket.io');
 const app = require('./app');
 require('dotenv').config();
 
 const server = http.createServer(app);
-const io = require('socket.io')(server);
+const io = socketIO(server);
 
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri,
@@ -19,7 +21,7 @@ io.on('connection', (socket) => {
   socket.on('authenticate', (data) => { // when user authenticates he joins the group's room
     group = data.name;
     socket.join(group);
-    io.sockets.in(group).emit('joinmessage', { message: 'Successfully joined room named ' + group });
+    io.sockets.in(group).emit('joinmessage', { message: `Successfully joined room named ${group}` });
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
@@ -29,6 +31,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 8081, () => {
-  console.log('Server is running on port 8081!');
+const port = process.env.PORT || 8081;
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}!`);
 });
