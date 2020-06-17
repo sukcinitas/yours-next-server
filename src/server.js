@@ -16,7 +16,13 @@ connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
 });
 
-let activeMembers = [];
+let state = {
+  group: {
+    activeMembers: [],
+    chosenEmojis: [],
+    messages: [],
+  }
+}
 io.on('connection', (socket) => {
   let client;
   let group;
@@ -24,13 +30,19 @@ io.on('connection', (socket) => {
     group = data.name;
     socket.join(group);
     io.sockets.in(group).emit('joinmessage', { message: `Successfully joined room named ${group}` });
+    if (state.group.activeMembers.length !== 0) {
+      socket.emit('setInitialState', state);
+    }
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
+    console.log(data, 'inside set message');
+    state.group.messages = [...state.group.messages, {message: data.message, name: data.member }];
   });
   socket.on('addMember', (data) => {
-    activeMembers = [...activeMembers, data];
-    io.sockets.in(group).emit('addMember', { name: data.name, emoji: data.emoji });
+    state.group.activeMembers = [...state.group.activeMembers, data];
+    state.group.chosenEmojis = [...state.group.chosenEmojis, data.emoji];
+    io.sockets.in(group).emit('addMember', data);
   });
   // I only set member in sender
   socket.on('setMember', (data) => {
@@ -38,7 +50,10 @@ io.on('connection', (socket) => {
     socket.emit('setMember', data);
   });
   socket.on('disconnect', () => {
-    activeMembers = activeMembers.filter(member => member.name !== client.name );
+    if (!client) {
+      return;
+    }
+    state.group.activeMembers = state.group.activeMembers.filter(member => member.name !== client.name );
     io.sockets.in(group).emit('removeMember', client);
   });
 });
