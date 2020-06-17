@@ -16,13 +16,7 @@ connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
 });
 
-let state = {
-  group: {
-    activeMembers: [],
-    chosenEmojis: [],
-    messages: [],
-  }
-}
+let state = {};
 io.on('connection', (socket) => {
   let client;
   let group;
@@ -30,18 +24,28 @@ io.on('connection', (socket) => {
     group = data.name;
     socket.join(group);
     io.sockets.in(group).emit('joinmessage', { message: `Successfully joined room named ${group}` });
-    if (state.group.activeMembers.length !== 0) {
-      socket.emit('setInitialState', state);
+    if (Object.keys(state).indexOf(group) !== -1 && state[group].activeMembers.length !== 0) {
+      socket.emit('setInitialState', { group: 
+        { 
+          activeMembers: state[group].activeMembers,
+          chosenEmojis: state[group].chosenEmojis,
+          messages: state[group].messages
+        }});
+    } else {
+      state[group] = {};
+      state[group].activeMembers = [];
+      state[group].chosenEmojis = [];
+      state[group].messages = [];
     }
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
     console.log(data, 'inside set message');
-    state.group.messages = [...state.group.messages, {message: data.message, name: data.member }];
+    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
   });
   socket.on('addMember', (data) => {
-    state.group.activeMembers = [...state.group.activeMembers, data];
-    state.group.chosenEmojis = [...state.group.chosenEmojis, data.emoji];
+    state[group].activeMembers.push(data);
+    state[group].chosenEmojis = [...state[group].chosenEmojis, data.emoji];
     io.sockets.in(group).emit('addMember', data);
   });
   // I only set member in sender
@@ -53,7 +57,7 @@ io.on('connection', (socket) => {
     if (!client) {
       return;
     }
-    state.group.activeMembers = state.group.activeMembers.filter(member => member.name !== client.name );
+    state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
     io.sockets.in(group).emit('removeMember', client);
   });
 });
