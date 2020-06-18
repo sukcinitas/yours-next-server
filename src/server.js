@@ -53,6 +53,9 @@ io.on('connection', (socket) => {
     client = data;
     socket.emit('setMember', data);
   });
+  socket.on('updatePlaylists', (data) => {
+    io.sockets.in(group).emit('updatePlaylists');
+  });
   socket.on('disconnect', () => {
     if (!client) {
       return;
