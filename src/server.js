@@ -29,7 +29,8 @@ io.on('connection', (socket) => {
         { 
           activeMembers: state[group].activeMembers,
           chosenEmojis: state[group].chosenEmojis,
-          messages: state[group].messages
+          messages: state[group].messages, 
+          moderator: state[group].moderator,
         }});
     } else {
       state[group] = {};
@@ -40,10 +41,13 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    console.log(data, 'inside set message');
     state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
   });
   socket.on('addMember', (data) => {
+    if (state[group].activeMembers.length === 0) {
+      state[group].moderator = data.name;
+      socket.emit('setModerator', data);
+    }
     state[group].activeMembers.push(data);
     state[group].chosenEmojis = [...state[group].chosenEmojis, data.emoji];
     io.sockets.in(group).emit('addMember', data);
@@ -61,8 +65,15 @@ io.on('connection', (socket) => {
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
-    state[group].activeMembers = state[group].chosenEmojis.filter( emoji => emoji !== emoji );
+    state[group].chosenEmojis = state[group].chosenEmojis.filter( emoji => emoji !== client.emoji );
     io.sockets.in(group).emit('removeMember', { client: client.name, emoji: client.emoji });
+    if (client.name === state[group].moderator && state[group].activeMembers.length !== 0) {
+      io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
+      state[group].moderator = state[group].activeMembers[0].name;
+    }
+  });
+  socket.on('setModerator', (name) => {
+    io.sockets.in(group).emit('setModerator', { name }); 
   });
 });
 
