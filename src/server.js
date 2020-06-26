@@ -61,7 +61,8 @@ io.on('connection', (socket) => {
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
-    io.sockets.in(group).emit('removeMember', client);
+    state[group].activeMembers = state[group].chosenEmojis.filter( emoji => emoji !== emoji );
+    io.sockets.in(group).emit('removeMember', { client: client.name, emoji: client.emoji });
   });
 });
 
