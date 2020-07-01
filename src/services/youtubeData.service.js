@@ -28,6 +28,7 @@ const YoutubeDataService = {
   // idList format is id separated by commas
   async getVideos({ idList, pageToken }) {
     try {
+      console.log('doing it');
       return await axios.get(`https://www.googleapis.com/youtube/v3/videos?&part=snippet&id=${idList}&maxResults=10&key=${key}&pageToken${pageToken}`);
     } catch (err) {
       throw Error(err.message);

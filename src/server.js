@@ -23,7 +23,6 @@ io.on('connection', (socket) => {
   socket.on('authenticate', (data) => { // when user authenticates he joins the group's room
     group = data.name;
     socket.join(group);
-    io.sockets.in(group).emit('joinmessage', { message: `Successfully joined room named ${group}` });
     if (Object.keys(state).indexOf(group) !== -1 && state[group].activeMembers.length !== 0) {
       socket.emit('setInitialState', { group: 
         { 
@@ -40,6 +39,7 @@ io.on('connection', (socket) => {
     }
   });
   socket.on('sendMessage', (data) => {
+    console.log(state, 'state');
     io.sockets.in(group).emit('sendMessage', data);
     state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
   });
@@ -59,6 +59,12 @@ io.on('connection', (socket) => {
   });
   socket.on('updatePlaylists', (data) => {
     io.sockets.in(group).emit('updatePlaylists');
+  });
+  socket.on('updatePlaylist', (data) => {
+    io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
+  });
+  socket.on('addItemToPendingRemovalList', (data) => {
+    io.sockets.in(group).emit('addItemToPendingRemovalList', { item: data.item });
   });
   socket.on('disconnect', () => {
     if (!client) {
