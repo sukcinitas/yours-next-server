@@ -30,12 +30,18 @@ io.on('connection', (socket) => {
           chosenEmojis: state[group].chosenEmojis,
           messages: state[group].messages, 
           moderator: state[group].moderator,
+          ongoingPlaylist: state[group].ongoingPlaylist,
         }});
     } else {
       state[group] = {};
       state[group].activeMembers = [];
       state[group].chosenEmojis = [];
       state[group].messages = [];
+      state[group].ongoingPlaylist = {
+        id: null,
+        videoIndex: 0,
+        time: 0, 
+      }
     }
   });
   socket.on('sendMessage', (data) => {
@@ -65,6 +71,17 @@ io.on('connection', (socket) => {
   });
   socket.on('addItemToPendingRemovalList', (data) => {
     io.sockets.in(group).emit('addItemToPendingRemovalList', { item: data.item });
+  });
+  socket.on('setOngoingPlaylist', (data) => {
+    state[group].ongoingPlaylist.id = data.id || state[group].ongoingPlaylist.id;
+    state[group].ongoingPlaylist.videoIndex = data.index || state[group].ongoingPlaylist.videoIndex;
+    state[group].ongoingPlaylist.time = data.time || state[group].ongoingPlaylist.time;
+    console.log(state, 'inside set playlist');
+    io.sockets.in(group).emit('setOngoingPlaylist', state[group].ongoingPlaylist);
+  });
+  socket.on('changeOngoingPlaylistVideoIndex', (data) => {
+    state[group].ongoingPlaylist.videoIndex = data.videoIndex;
+    io.sockets.in(group).emit('changeOngoingPlaylistVideoIndex', { videoIndex: data.videoIndex });
   });
   socket.on('disconnect', () => {
     if (!client) {
