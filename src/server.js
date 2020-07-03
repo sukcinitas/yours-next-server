@@ -20,10 +20,10 @@ let state = {};
 io.on('connection', (socket) => {
   let client;
   let group;
-  socket.on('authenticate', (data) => { // when user authenticates he joins the group's room
+  socket.on('getInitialState', (data) => { // when user authenticates/creates he joins the group's room
     group = data.name;
     socket.join(group);
-    if (Object.keys(state).indexOf(group) !== -1 && state[group].activeMembers.length !== 0) {
+    if (Object.keys(state).indexOf(group) !== -1) {
       socket.emit('setInitialState', { group: 
         { 
           activeMembers: state[group].activeMembers,
@@ -44,11 +44,6 @@ io.on('connection', (socket) => {
       }
     }
   });
-  socket.on('sendMessage', (data) => {
-    console.log(state, 'state');
-    io.sockets.in(group).emit('sendMessage', data);
-    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
-  });
   socket.on('addMember', (data) => {
     if (state[group].activeMembers.length === 0) {
       state[group].moderator = data.name;
@@ -63,8 +58,12 @@ io.on('connection', (socket) => {
     client = data;
     socket.emit('setMember', data);
   });
+  socket.on('sendMessage', (data) => {
+    io.sockets.in(group).emit('sendMessage', data);
+    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
+  });
   socket.on('updatePlaylists', (data) => {
-    io.sockets.in(group).emit('updatePlaylists');
+    io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
   });
   socket.on('updatePlaylist', (data) => {
     io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
