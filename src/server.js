@@ -27,7 +27,6 @@ io.on('connection', (socket) => {
       socket.emit('setInitialState', { group: 
         { 
           activeMembers: state[group].activeMembers,
-          chosenEmojis: state[group].chosenEmojis,
           messages: state[group].messages, 
           moderator: state[group].moderator,
           ongoingPlaylist: state[group].ongoingPlaylist,
@@ -35,10 +34,10 @@ io.on('connection', (socket) => {
     } else {
       state[group] = {};
       state[group].activeMembers = [];
-      state[group].chosenEmojis = [];
       state[group].messages = [];
+      state[group].moderator = '',
       state[group].ongoingPlaylist = {
-        id: null,
+        id: '',
         videoIndex: 0,
         time: 0, 
       }
@@ -50,7 +49,6 @@ io.on('connection', (socket) => {
       socket.emit('setModerator', data);
     }
     state[group].activeMembers.push(data);
-    state[group].chosenEmojis = [...state[group].chosenEmojis, data.emoji];
     io.sockets.in(group).emit('addMember', data);
   });
   // I only set member in sender
@@ -68,19 +66,24 @@ io.on('connection', (socket) => {
   socket.on('updatePlaylist', (data) => {
     io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
   });
-  socket.on('addItemToPendingRemovalList', (data) => {
-    io.sockets.in(group).emit('addItemToPendingRemovalList', { item: data.item });
-  });
+  // socket.on('addItemToPendingRemovalList', (data) => {
+  //   io.sockets.in(group).emit('addItemToPendingRemovalList', { item: data.item });
+  // });
   socket.on('setOngoingPlaylist', (data) => {
     state[group].ongoingPlaylist.id = data.id || state[group].ongoingPlaylist.id;
-    state[group].ongoingPlaylist.videoIndex = data.index || state[group].ongoingPlaylist.videoIndex;
+    state[group].ongoingPlaylist.videoIndex = data.videoIndex || state[group].ongoingPlaylist.videoIndex;
     state[group].ongoingPlaylist.time = data.time || state[group].ongoingPlaylist.time;
-    console.log(state, 'inside set playlist');
     io.sockets.in(group).emit('setOngoingPlaylist', state[group].ongoingPlaylist);
   });
   socket.on('changeOngoingPlaylistVideoIndex', (data) => {
     state[group].ongoingPlaylist.videoIndex = data.videoIndex;
     io.sockets.in(group).emit('changeOngoingPlaylistVideoIndex', { videoIndex: data.videoIndex });
+  });
+  socket.on('pauseOngoingPlaylist', () => {
+    io.sockets.in(group).emit('pauseOngoingPlaylist');
+  });
+  socket.on('playOngoingPlaylist', () => {
+    io.sockets.in(group).emit('playOngoingPlaylist');
   });
   socket.on('disconnect', () => {
     if (!client) {
