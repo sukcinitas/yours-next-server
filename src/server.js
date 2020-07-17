@@ -66,9 +66,6 @@ io.on('connection', (socket) => {
   socket.on('updatePlaylist', (data) => {
     io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
   });
-  // socket.on('addItemToPendingRemovalList', (data) => {
-  //   io.sockets.in(group).emit('addItemToPendingRemovalList', { item: data.item });
-  // });
   socket.on('setOngoingPlaylist', (data) => {
     state[group].ongoingPlaylist.id = data.id || state[group].ongoingPlaylist.id;
     state[group].ongoingPlaylist.videoIndex = data.videoIndex || state[group].ongoingPlaylist.videoIndex;
@@ -90,7 +87,6 @@ io.on('connection', (socket) => {
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
-    state[group].chosenEmojis = state[group].chosenEmojis.filter( emoji => emoji !== client.emoji );
     io.sockets.in(group).emit('removeMember', { client: client.name, emoji: client.emoji });
     if (client.name === state[group].moderator && state[group].activeMembers.length !== 0) {
       io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
