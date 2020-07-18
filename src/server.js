@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
+    state[group].messages = [...state[group].messages || [], {message: data.message, name: data.member }];
   });
   socket.on('updatePlaylists', (data) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
