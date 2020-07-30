@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
   // I only set member in sender
   socket.on('setMember', (data) => {
     client = data;
-    socket.emit('setMember', data);
+    // socket.emit('setMember', data);
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
