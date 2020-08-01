@@ -35,14 +35,14 @@ const GroupController = {
       if (!name || !passcode) {
         return res.json({
           success: false,
-          message: 'Failed to authenticate!',
+          message: 'Authentication failed!',
         });
       }
       const groupInfo = await GroupService.getGroupInfo(name);
       if (!groupInfo) {
         return res.json({
           success: false,
-          message: 'Group with this name does not exist!',
+          message: 'Group with this name is not found!',
         });
       }
       if (passcode === groupInfo.passcode) {
@@ -59,7 +59,7 @@ const GroupController = {
       console.log(err);
       return res.json({
         success: false,
-        message: 'Failed to authenticate!',
+        message: 'Authentication failed!',
         error: err.message,
       });
     }
