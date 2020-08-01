@@ -67,21 +67,23 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
   });
   socket.on('setOngoingPlaylist', (data) => {
-    state[group].ongoingPlaylist.id = data.id || state[group].ongoingPlaylist.id;
-    state[group].ongoingPlaylist.videoIndex = data.videoIndex || state[group].ongoingPlaylist.videoIndex;
-    state[group].ongoingPlaylist.time = data.time || state[group].ongoingPlaylist.time;
+    state[group].ongoingPlaylist.id = data.id;
+    state[group].ongoingPlaylist.videoIndex = data.videoIndex;
+    state[group].ongoingPlaylist.time = data.time;
+    state[group].ongoingPlaylist.paused = false;
     io.sockets.in(group).emit('setOngoingPlaylist', state[group].ongoingPlaylist);
   });
   socket.on('changeOngoingPlaylistVideoIndex', (data) => {
     state[group].ongoingPlaylist.videoIndex = data.videoIndex;
     io.sockets.in(group).emit('changeOngoingPlaylistVideoIndex', { videoIndex: data.videoIndex });
   });
-  socket.on('pauseOngoingPlaylist', () => {
-    io.sockets.in(group).emit('pauseOngoingPlaylist');
+  socket.on('toggleOngoingPlaylist', (data) => {
+    console.log('data in toggle', data)
+    io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
-  socket.on('playOngoingPlaylist', () => {
-    io.sockets.in(group).emit('playOngoingPlaylist');
-  });
+  // socket.on('playOngoingPlaylist', () => {
+  //   io.sockets.in(group).emit('playOngoingPlaylist');
+  // });
   socket.on('disconnect', () => {
     if (!client) {
       return;
