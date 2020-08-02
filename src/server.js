@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
       state[group].moderator = data.name;
       socket.emit('setModerator', data);
     }
-    state[group].activeMembers = [{"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}];
+    state[group].activeMembers = [];
     state[group].activeMembers.push(data);
     io.sockets.in(group).emit('addMember', data);
   });
@@ -94,6 +94,9 @@ io.on('connection', (socket) => {
     if (client.name === state[group].moderator && state[group].activeMembers.length !== 0) {
       io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
       state[group].moderator = state[group].activeMembers[0].name;
+    }
+    if (state[group].activeMembers.length === 0) {
+      state[group] = {};
     }
   });
   socket.on('setModerator', (name) => {
