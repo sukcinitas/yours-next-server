@@ -48,6 +48,7 @@ io.on('connection', (socket) => {
       state[group].moderator = data.name;
       socket.emit('setModerator', data);
     }
+    state[group].activeMembers = [{"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}, {"name":"name","emoji":"🐈"}];
     state[group].activeMembers.push(data);
     io.sockets.in(group).emit('addMember', data);
   });
