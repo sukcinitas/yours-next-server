@@ -86,6 +86,7 @@ io.on('connection', (socket) => {
   //   io.sockets.in(group).emit('playOngoingPlaylist');
   // });
   socket.on('disconnect', () => {
+    console.log('disconnecting', client);
     if (!client) {
       return;
     }
@@ -96,7 +97,7 @@ io.on('connection', (socket) => {
       state[group].moderator = state[group].activeMembers[0].name;
     }
     if (state[group].activeMembers.length === 0) {
-      state[group] = {};
+      delete state[group];
     }
   });
   socket.on('setModerator', (name) => {

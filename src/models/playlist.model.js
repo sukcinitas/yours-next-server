@@ -13,6 +13,8 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true,
 });
 
 const Playlist = mongoose.model('playlist', playlistSchema);
