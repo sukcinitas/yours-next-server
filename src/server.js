@@ -57,10 +57,10 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    console.log(state, group, 'inside send messag');
-    state[group].messages = [state[group]  ? state[group].messages : [], 
-    // fallback so it wouldn't crash
-    {message: data.message, name: data.member }];
+    console.log(state, group, 'inside send message');
+    if (state[group]) { // fallback so it wouldn't crash
+      state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
+    }
   });
   socket.on('updatePlaylists', (data) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
