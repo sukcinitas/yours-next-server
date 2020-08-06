@@ -81,8 +81,21 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
   socket.on('disconnect', () => {
-    console.log('disconnecting', client);
-    if (!client) {
+    console.log('disconnecting', client, state); // when it disconnects automatically(heroku?), set state to
+    // comeback to entrance page
+    if (client === undefined) {
+      socket.emit('setInitialState', { group: 
+        { 
+          activeMembers: [],
+          messages: [], 
+          moderator: '',
+          ongoingPlaylist: {
+            id: '',
+            videoIndex: 0,
+            time: 0,
+            paused: false,
+          },
+        }});
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
