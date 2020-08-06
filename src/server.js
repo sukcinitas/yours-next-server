@@ -48,18 +48,16 @@ io.on('connection', (socket) => {
       state[group].moderator = data.name;
       socket.emit('setModerator', data);
     }
-    state[group].activeMembers = [];
     state[group].activeMembers.push(data);
     io.sockets.in(group).emit('addMember', data);
   });
   // I only set member in sender
   socket.on('setMember', (data) => {
     client = data;
-    // socket.emit('setMember', data);
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    state[group].messages = [...state[group].messages || [], {message: data.message, name: data.member }];
+    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
   });
   socket.on('updatePlaylists', (data) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
@@ -82,9 +80,6 @@ io.on('connection', (socket) => {
     console.log('data in toggle', data)
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
-  // socket.on('playOngoingPlaylist', () => {
-  //   io.sockets.in(group).emit('playOngoingPlaylist');
-  // });
   socket.on('disconnect', () => {
     console.log('disconnecting', client);
     if (!client) {
@@ -99,6 +94,9 @@ io.on('connection', (socket) => {
     if (state[group].activeMembers.length === 0) {
       delete state[group];
     }
+  });
+  socket.on('reconnect_attempt', () => {
+    console.log('reconnecting', state);
   });
   socket.on('setModerator', (name) => {
     io.sockets.in(group).emit('setModerator', { name }); 
