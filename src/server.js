@@ -103,8 +103,9 @@ io.on('connection', (socket) => {
       delete state[group];
     }
   });
-  socket.on('reconnect_attempt', () => {
+  socket.on('reconnect', () => {
     console.log('reconnecting', state);
+    socket.emit('reload'); 
   });
   socket.on('setModerator', (name) => {
     io.sockets.in(group).emit('setModerator', { name }); 
