@@ -57,7 +57,9 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
+    state[group].messages = [state[group].messages ? state[group].messages : [], 
+    // fallback so it wouldn't crash
+    {message: data.message, name: data.member }];
   });
   socket.on('updatePlaylists', (data) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
@@ -81,25 +83,13 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
   socket.on('disconnect', () => {
-    console.log('disconnecting', client, state); // when it disconnects automatically(heroku?), set state to
-    // comeback to entrance page
+    console.log('disconnecting', client, state); // when it disconnects automatically(heroku?), reload
     if (!group) {
       return;
     }
-    if (client === undefined && state[group].activeMembers.length === 1) { // last one to disconnect
-      delete state[group];
-      socket.emit('setInitialState', { group: 
-        { 
-          activeMembers: [],
-          messages: [], 
-          moderator: '',
-          ongoingPlaylist: {
-            id: '',
-            videoIndex: 0,
-            time: 0,
-            paused: false,
-          },
-        }});
+    if (state[group].activeMembers.length === 1) { // last one to disconnect, reload
+      group ? delete state[group] : '';
+      socket.emit('relaod');
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
