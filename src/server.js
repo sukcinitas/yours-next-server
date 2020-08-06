@@ -84,12 +84,13 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
   socket.on('disconnect', () => {
-    console.log('disconnecting', client, state); // when it disconnects automatically(heroku?), reload
+    console.log('disconnect', client, state); // when it disconnects automatically(heroku?), reload
     if (!group) {
       return;
     }
-    if (state[group].activeMembers.length === 1) { // last one to disconnect
+    if (state[group].activeMembers.length === 1 ) { // last one to disconnect
       group ? delete state[group] : '';
+      socket.emit('reload'); 
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
@@ -98,13 +99,6 @@ io.on('connection', (socket) => {
       io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
       state[group].moderator = state[group].activeMembers[0].name;
     }
-    socket.emit('reload'); 
-    if (state[group].activeMembers.length === 0) {
-      delete state[group];
-    }
-  });
-  socket.on('reconnect', () => {
-    console.log('reconnecting', state);
     socket.emit('reload'); 
   });
   socket.on('setModerator', (name) => {
