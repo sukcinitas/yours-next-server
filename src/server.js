@@ -87,9 +87,8 @@ io.on('connection', (socket) => {
     if (!group) {
       return;
     }
-    if (state[group].activeMembers.length === 1) { // last one to disconnect, reload
+    if (state[group].activeMembers.length === 1) { // last one to disconnect
       group ? delete state[group] : '';
-      socket.emit('relaod');
       return;
     }
     state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
@@ -98,6 +97,7 @@ io.on('connection', (socket) => {
       io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
       state[group].moderator = state[group].activeMembers[0].name;
     }
+    socket.emit('relaod'); 
     if (state[group].activeMembers.length === 0) {
       delete state[group];
     }
