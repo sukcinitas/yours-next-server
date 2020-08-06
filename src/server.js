@@ -57,7 +57,8 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    state[group].messages = [state[group].messages ? state[group].messages : [], 
+    console.log(state, group, 'inside send messag');
+    state[group].messages = [state[group]  ? state[group].messages : [], 
     // fallback so it wouldn't crash
     {message: data.message, name: data.member }];
   });
@@ -97,7 +98,7 @@ io.on('connection', (socket) => {
       io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
       state[group].moderator = state[group].activeMembers[0].name;
     }
-    socket.emit('relaod'); 
+    socket.emit('reload'); 
     if (state[group].activeMembers.length === 0) {
       delete state[group];
     }
