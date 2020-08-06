@@ -83,6 +83,9 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('disconnecting', client, state); // when it disconnects automatically(heroku?), set state to
     // comeback to entrance page
+    if (!group) {
+      return;
+    }
     if (client === undefined && state[group].activeMembers.length === 1) { // last one to disconnect
       delete state[group];
       socket.emit('setInitialState', { group: 
