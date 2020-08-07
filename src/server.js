@@ -68,7 +68,11 @@ io.on('connection', (socket) => {
   socket.on('updatePlaylist', (data) => {
     io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
   });
+  socket.on('userJoinsOngoingPlaylist', () => {
+    io.sockets.in(group).emit('userJoinsOngoingPlaylist');  
+  });
   socket.on('setOngoingPlaylist', (data) => {
+    console.log(data);
     state[group].ongoingPlaylist.id = data.id;
     state[group].ongoingPlaylist.videoIndex = data.videoIndex;
     state[group].ongoingPlaylist.time = data.time;
