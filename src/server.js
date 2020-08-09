@@ -66,7 +66,14 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
   });
   socket.on('updatePlaylist', (data) => {
-    io.sockets.in(group).emit('updatePlaylist', { idsArray: data.idsArray, items: data.items });
+    console.log(data);
+    io.sockets.in(group).emit('updatePlaylist', { 
+      idsArray: data.idsArray, 
+      itemData: data.itemData,
+      type: data.type, 
+      alreadyIn: data.alreadyIn,
+      id: data.id,
+    });
   });
   socket.on('userJoinsOngoingPlaylist', () => {
     io.sockets.in(group).emit('userJoinsOngoingPlaylist');  
