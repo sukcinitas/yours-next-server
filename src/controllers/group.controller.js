@@ -1,4 +1,5 @@
 const GroupService = require('../services/group.service');
+const { compareSync } = require('bcryptjs');
 
 const GroupController = {
   async createGroup(req, res) {
@@ -45,7 +46,7 @@ const GroupController = {
           message: 'Group with this name is not found!',
         });
       }
-      if (passcode === groupInfo.passcode) {
+      if (compareSync(passcode, groupInfo.passcode)) {
         return res.json({
           success: true,
           message: 'Authentication succeeded!',
@@ -56,7 +57,6 @@ const GroupController = {
         message: 'Passcode is incorrect!',
       });
     } catch (err) {
-      console.log(err);
       return res.json({
         success: false,
         message: 'Authentication failed!',

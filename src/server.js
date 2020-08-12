@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => {
     console.log('disconnect', client, state); // when it disconnects automatically(heroku?), reload
-    if (!group) {
+    if (!group || !client) {
       return;
     }
     if (state[group].activeMembers.length === 1 ) { // last one to disconnect
