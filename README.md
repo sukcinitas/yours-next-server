@@ -18,7 +18,7 @@
 
 ### /group
 - /group/create **POST** || **req.body**  `{ name, passcode }`
-   - `{ success: false, message: 'Failed to create group!'}` if recieves no name and/or passcode or otherwise fails
+   - `{ success: false, message: 'Failed to create the group!'}` if recieves no name and/or passcode or otherwise fails
    - `{ success: false, message: 'Name is already in use!'}` if name is already used
    - `{ success: true, message: 'Group has been successfully created! }` if operation is successful
 - /group/authenticate **POST** || **req.body** `{ name, passcode }`
