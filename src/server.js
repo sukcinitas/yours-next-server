@@ -57,7 +57,6 @@ io.on('connection', (socket) => {
   });
   socket.on('sendMessage', (data) => {
     io.sockets.in(group).emit('sendMessage', data);
-    console.log(state, group, 'inside send message');
     if (state[group]) { // fallback so it wouldn't crash
       state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
     }
@@ -66,7 +65,6 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('updatePlaylists', { playlists: data.playlists });
   });
   socket.on('updatePlaylist', (data) => {
-    console.log(data);
     io.sockets.in(group).emit('updatePlaylist', { 
       idsArray: data.idsArray, 
       itemData: data.itemData,
@@ -79,7 +77,6 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('userJoinsOngoingPlaylist');  
   });
   socket.on('setOngoingPlaylist', (data) => {
-    console.log(data);
     state[group].ongoingPlaylist.id = data.id;
     state[group].ongoingPlaylist.videoIndex = data.videoIndex;
     state[group].ongoingPlaylist.time = data.time;
@@ -91,11 +88,9 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('changeOngoingPlaylistVideoIndex', { videoIndex: data.videoIndex });
   });
   socket.on('toggleOngoingPlaylist', (data) => {
-    console.log('data in toggle', data)
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
   socket.on('disconnect', () => {
-    console.log('disconnect', client, state); // when it disconnects automatically(heroku?), reload
     if (!group || !client) {
       return;
     }
