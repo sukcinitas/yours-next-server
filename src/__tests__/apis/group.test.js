@@ -54,7 +54,7 @@ describe('Test the /api/group/authenticate path', () => {
     const response = await request(app).post('/api/group/authenticate').send({ name: 'other name', passcode: 'passcode' });
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Group with this name does not exist!');
+    expect(response.body).toHaveProperty('message', 'Group with this name is not found!');
   });
 
   test('It should send a response to the POST method, when authentication fails, because passcode is incorrect', async () => {
@@ -68,6 +68,6 @@ describe('Test the /api/group/authenticate path', () => {
     const response = await request(app).post('/api/group/authenticate').send();
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Failed to authenticate!');
+    expect(response.body).toHaveProperty('message', 'Authentication failed!');
   });
 });
