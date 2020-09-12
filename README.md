@@ -24,10 +24,11 @@ You can take a look at the application [here](http://infinite-woodland-46117.her
 ----
 ## Setup
 - Check the app [here](http://infinite-woodland-46117.herokuapp.com) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up) 
-- or clone this repository - `git clone https://github.com/sukcinitas/yours-next-server.git`, install dependencies - 
-`npm install` (you will need `npm` and `node` installed globally); fetch all submodule data - `cd client`, `git submodule init`, `git submodule update`; set .env file using your *MONGODB_URI* and *GOOGLE_API_KEY*. 
-
+- or clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each - 
+`npm install` (you will need `npm` and `node` installed globally);  set .env file using your *MONGODB_URI* and *GOOGLE_API_KEY*. 
   - `npm run dev` - to run the app on [localhost:8080](http://localhost:8080/)
+
+- to initialize and fetch all submodule data - `cd client`, `git submodule init`, `git submodule update`.
 
 ----
 ### /api/group
