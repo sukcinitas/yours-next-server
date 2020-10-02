@@ -6,7 +6,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
   mongoose.Promise = Promise;
-  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,  useCreateIndex: true, useFindAndModify: false  });
   await Group.deleteMany({}).exec();
   await Group.create({
     name: 'name',

@@ -10,7 +10,7 @@ const io = socketIO(server);
 
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri,
-  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false });
 const { connection } = mongoose;
 connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
     io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
   });
   socket.on('disconnect', () => {
-    if (!group || !client) {
+    if (!state[group] || !client) {
       return;
     }
     if (state[group].activeMembers.length === 1 ) { // last one to disconnect

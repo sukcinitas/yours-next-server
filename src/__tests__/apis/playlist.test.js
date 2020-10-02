@@ -7,9 +7,9 @@ require('dotenv').config();
 
 beforeAll(async () => {
   mongoose.Promise = Promise;
-  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-  await Group.deleteMany({}).exec();
+  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,  useCreateIndex: true, useFindAndModify: false  });
   await Playlist.deleteMany({}).exec();
+  await Group.deleteMany({}).exec();
   await Group.create({
     name: 'name',
     passcode: 'passcode',
@@ -21,8 +21,8 @@ beforeAll(async () => {
   });
 });
 afterAll(async (done) => { 
-  await Group.deleteMany({}).exec();
   await Playlist.deleteMany({}).exec();
+  await Group.deleteMany({}).exec();
   mongoose.disconnect(done); 
 });
 

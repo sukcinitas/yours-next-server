@@ -22,6 +22,11 @@ const PlaylistController = {
   async createPlaylist(req, res) {
     try {
       const { title, createdBy } = req.body;
+      const playlists = await PlaylistService.getPlaylists(createdBy); 
+      const playlistsTitles = playlists.map(playlist => playlist.title);
+      if (playlistsTitles.indexOf(title) > -1) {
+        return res.json({ success: false, message: 'Playlist with this title already exists!'});
+      }
       const playlist = await PlaylistService.createPlaylist({ title, createdBy });
       return res.json({ success: true, playlist, message: 'Playlist has been successfully created!' });
     } catch (err) {
