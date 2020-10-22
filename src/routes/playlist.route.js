@@ -1,17 +1,19 @@
 const router = require('express').Router();
 const PlaylistController = require('../controllers/playlist.controller');
 
+const catchErr = (f) => (req, res, next) => f(req, res)
+	.catch((err) => next(err));
+
 router.route('/')
-  // .get((req,res) => PlaylistController.getPlaylists(req, res).catch(err => res.send('Hey')))
-  .get(PlaylistController.getPlaylists)
-  .post(PlaylistController.createPlaylist);
+  .get(catchErr(PlaylistController.getPlaylists))
+  .post(catchErr(PlaylistController.createPlaylist));
 
 router.route('/:id')
-  .get(PlaylistController.getPlaylist)
-  .delete(PlaylistController.deletePlaylist)
-  .put(PlaylistController.updatePlaylist);
+  .get(catchErr(PlaylistController.getPlaylist))
+  .delete(catchErr(PlaylistController.deletePlaylist))
+  .put(catchErr(PlaylistController.updatePlaylist));
 
 router.route('/:id/removeItem')
-  .put(PlaylistController.removeItemFromPlaylist);
+  .put(catchErr(PlaylistController.removeItemFromPlaylist));
   
 module.exports = router;

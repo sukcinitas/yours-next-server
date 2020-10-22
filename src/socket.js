@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
     socket.on('sendMessage', (data) => {
       io.sockets.in(group).emit('sendMessage', data);
       if (state[group]) { // fallback so it wouldn't crash
-        state[group].messages = [...state[group].messages, {message: data.message, name: data.member }];
+        state[group].messages = [...state[group].messages, {message: data.message, member: data.member }];
       }
     });
     socket.on('updatePlaylists', (data) => {
