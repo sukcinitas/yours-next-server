@@ -31,6 +31,11 @@ io.on('connection', (socket) => {
         state[group].moderator = data.name;
         socket.emit('setModerator', data);
       }
+      if(state[group].activeMembers.some((member) => {
+        member.name === data.name && member.emoji === data.emoji;
+      })) {
+        return;
+      }
       state[group].activeMembers.push(data);
       io.sockets.in(group).emit('addMember', data);
     });
@@ -73,7 +78,8 @@ io.on('connection', (socket) => {
     socket.on('toggleOngoingPlaylist', (data) => {
       io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
     });
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (reason) => {
+      console.log(reason, state);
       if (!state[group] || !client) {
         return;
       }
@@ -87,8 +93,12 @@ io.on('connection', (socket) => {
         io.sockets.in(group).emit('setModerator', { name: state[group].activeMembers[0].name }); 
         state[group].moderator = state[group].activeMembers[0].name;
       }
+      console.log(state);
     });
     socket.on('setModerator', (name) => {
       io.sockets.in(group).emit('setModerator', { name }); 
     });
+    socket.on('ping',() => {
+      console.log('ping');
+    })
 });
