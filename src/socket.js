@@ -27,11 +27,14 @@ io.on('connection', (socket) => {
       }
     });
     socket.on('addMember', (data) => {
+      console.log(state, 'state')
       if (state[group].activeMembers.length === 0) {
+        console.log('1');
         state[group].moderator = data.name;
         socket.emit('setModerator', data);
       }
       if (state[group] && state[group].activeMembers.filter((member) => member.name === data.name).length < 1) {
+        console.log('2');
         state[group].activeMembers.push(data);
         io.sockets.in(group).emit('addMember', data);
       }
@@ -75,8 +78,12 @@ io.on('connection', (socket) => {
     socket.on('toggleOngoingPlaylist', (data) => {
       io.sockets.in(group).emit('toggleOngoingPlaylist', { paused: data.paused });
     });
-    socket.on('disconnect', () => {
-      if (!state[group] || !client) {
+    socket.on('disconnect', (reason) => {
+      if (!group in state || !client) {
+        return;
+      }
+      if (reason === 'client namespace disconnect' && state[group].activeMembers.length <= 1) {
+        delete state[group];
         return;
       }
       state[group].activeMembers = state[group].activeMembers.filter(member => member.name !== client.name );
