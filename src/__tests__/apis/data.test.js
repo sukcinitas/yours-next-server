@@ -13,7 +13,9 @@ describe('Test the /api/data/search path', () => {
 
 describe('Test the /api/data/playlist path', () => {
   test('It should send a response to the GET method, when it is succeessful', async () => {
-    const response = await request(app).get('/api/data/playlists?channelId=UCazpYHBPTXKy9t9E78yuWnQ');
+    const response = await request(app).get(
+      '/api/data/playlists?channelId=UCazpYHBPTXKy9t9E78yuWnQ'
+    );
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('data');
@@ -30,14 +32,18 @@ describe('Test the /api/data/playlist path', () => {
 
 describe('Test the /api/data/playlist path', () => {
   test('It should send a response to the GET method, when it is succeessful', async () => {
-    const response = await request(app).get('/api/data/playlistItems?playlistId=PLcCyuE3mscVGB_LflsnXjliFKms77apx0');
+    const response = await request(app).get(
+      '/api/data/playlistItems?playlistId=PLcCyuE3mscVGB_LflsnXjliFKms77apx0'
+    );
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('data');
   });
 
   test('It should send a response to the GET method, when it fails', async () => {
-    const response = await request(app).get('/api/data/playlistItems?playlistId=1');
+    const response = await request(app).get(
+      '/api/data/playlistItems?playlistId=1'
+    );
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Could not get results!');
@@ -47,10 +53,11 @@ describe('Test the /api/data/playlist path', () => {
 
 describe('Test the /api/data/playlist path', () => {
   test('It should send a response to the GET method, when it is succeessful', async () => {
-    const response = await request(app).get('/api/data/videos?idList=TfenCTabhDY');
+    const response = await request(app).get(
+      '/api/data/videos?idList=TfenCTabhDY'
+    );
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('data');
   });
-
 });

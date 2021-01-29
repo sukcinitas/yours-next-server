@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const YoutubeDataController = require('../controllers/youtubeData.controller');
 
-const catchErr = (f) => (req, res, next) => f(req, res)
-	.catch((err) => next(err));
+const catchErr = (f) => (req, res, next) =>
+  f(req, res).catch((err) => next(err));
 
 // api/data/search?q=&pageToken=
 router.get('/search', catchErr(YoutubeDataController.search));
