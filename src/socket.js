@@ -96,13 +96,6 @@ module.exports = (io) =>
       if (!group in state || !client) {
         return;
       }
-      if (
-        reason === 'client namespace disconnect' &&
-        state[group].activeMembers.length <= 1
-      ) {
-        delete state[group];
-        return;
-      }
       state[group].activeMembers = state[group].activeMembers.filter(
         (member) => member.name !== client.name
       );
@@ -110,14 +103,38 @@ module.exports = (io) =>
         .in(group)
         .emit('removeMember', { client: client.name, emoji: client.emoji });
       if (
-        client.name === state[group].moderator &&
-        state[group].activeMembers.length !== 0
+        reason === 'client namespace disconnect'
       ) {
-        io.sockets
-          .in(group)
-          .emit('setModerator', { name: state[group].activeMembers[0].name });
-        state[group].moderator = state[group].activeMembers[0].name;
+        if (
+          client.name === state[group].moderator &&
+          state[group].activeMembers.length !== 0
+        ) {
+          console.log(state[group].activeMembers);
+          io.sockets
+            .in(group)
+            .emit('setModerator', { name: state[group].activeMembers[0].name });
+          state[group].moderator = state[group].activeMembers[0].name;
+        }
+      if (state[group].activeMembers.length <= 0) {
+        delete state[group];
+        return;
       }
+      }
+      // state[group].activeMembers = state[group].activeMembers.filter(
+      //   (member) => member.name !== client.name
+      // );
+      // io.sockets
+      //   .in(group)
+      //   .emit('removeMember', { client: client.name, emoji: client.emoji });
+      // if (
+      //   client.name === state[group].moderator &&
+      //   state[group].activeMembers.length !== 0
+      // ) {
+      //   io.sockets
+      //     .in(group)
+      //     .emit('setModerator', { name: state[group].activeMembers[0].name });
+      //   state[group].moderator = state[group].activeMembers[0].name;
+      // }
     });
     socket.on('setModerator', (name) => {
       io.sockets.in(group).emit('setModerator', { name });
