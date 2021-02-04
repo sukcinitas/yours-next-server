@@ -23,7 +23,7 @@ const PlaylistService = {
     return 'Playlist has been successfully deleted!';
   },
   async updatePlaylist({ id, item }) {
-    await Playlist.updateOne({ _id: id }, { $push: { items: item } }).exec();
+    await Playlist.updateOne({ _id: id }, { $addToSet: { items: item } }).exec();
     return;
   },
   async removeItemFromPlaylist({ id, items }) {

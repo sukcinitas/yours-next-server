@@ -7,7 +7,7 @@ const PlaylistController = {
       const playlists = await PlaylistService.getPlaylists(createdBy);
       return res.json({ success: true, playlists });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not get playlists!',
         error: err.message,
@@ -18,11 +18,18 @@ const PlaylistController = {
     try {
       const { id } = req.params;
       const playlist = await PlaylistService.getPlaylist(id);
+      if (!playlist) {
+        return res.status(500).json({
+          success: false,
+          message: 'Playlist has been deleted!',
+          error: err.message,
+        });
+      }
       return res.json({ success: true, playlist });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
-        message: 'Could not get playlist!',
+        message: 'Could not get playlist or playlist has been deleted!',
         error: err.message,
       });
     }
@@ -33,7 +40,7 @@ const PlaylistController = {
       const playlists = await PlaylistService.getPlaylists(createdBy);
       const playlistsTitles = playlists.map((playlist) => playlist.title);
       if (playlistsTitles.indexOf(title) > -1) {
-        return res.json({
+        return res.status(500).json({
           success: false,
           message: 'Playlist with this title already exists!',
         });
@@ -48,7 +55,7 @@ const PlaylistController = {
         message: 'Playlist has been successfully created!',
       });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not create playlist!',
         error: err.message,
@@ -64,7 +71,7 @@ const PlaylistController = {
         message: 'Playlist has been successfully deleted!',
       });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not delete playlist!',
         error: err.message,
@@ -76,7 +83,7 @@ const PlaylistController = {
       const { id } = req.params;
       const { item } = req.body;
       if (!item) {
-        return res.json({
+        return res.status(500).json({
           success: false,
           message: 'Could not update playlist!',
         });
@@ -85,7 +92,7 @@ const PlaylistController = {
       const playlist = await PlaylistService.getPlaylist(id);
       return res.json({ success: true, playlist });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not update playlist!',
         error: err.message,
@@ -97,7 +104,7 @@ const PlaylistController = {
       const { id } = req.params;
       const { items } = req.body;
       if (items.length === 0) {
-        return res.json({ success: false, message: 'No item(s) to delete!' });
+        return res.status(500).json({ success: false, message: 'No item(s) to delete!' });
       }
       await PlaylistService.removeItemFromPlaylist({ id, items });
       return res.json({
@@ -105,7 +112,7 @@ const PlaylistController = {
         message: 'Item(s) has been successfully deleted!',
       });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not delete playlist item(s)!',
         error: err.message,

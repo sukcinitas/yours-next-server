@@ -6,14 +6,16 @@ const GroupController = {
     try {
       const { name, passcode } = req.body;
       if (!name || !passcode) {
-        return res.json({
+        return res.status(500).json({
           success: false,
+          type: 'general',
           message: 'Failed to create the group!',
         });
       }
       if (await GroupService.checkIfGroupExists(name)) {
-        return res.json({
+        return res.status(500).json({
           success: false,
+          type: 'name',
           message: 'Name is already in use!',
         });
       }
@@ -23,8 +25,9 @@ const GroupController = {
         message: 'Group has been successfully created!',
       });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
+        type: 'general',
         message: 'Failed to create the group!',
         err: err.message,
       });
@@ -34,15 +37,17 @@ const GroupController = {
     try {
       const { name, passcode } = req.body;
       if (!name || !passcode) {
-        return res.json({
+        return res.status(500).json({
           success: false,
+          type: 'general',
           message: 'Authentication failed!',
         });
       }
       const groupInfo = await GroupService.getGroupInfo(name);
       if (!groupInfo) {
-        return res.json({
+        return res.status(500).json({
           success: false,
+          type: 'name',
           message: 'Group with this name is not found!',
         });
       }
@@ -52,13 +57,15 @@ const GroupController = {
           message: 'Authentication succeeded!',
         });
       }
-      return res.json({
+      return res.status(500).json({
         success: false,
+        type: 'passcode',
         message: 'Passcode is incorrect!',
       });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
+        type: 'general',
         message: 'Authentication failed!',
         error: err.message,
       });

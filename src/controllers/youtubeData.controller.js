@@ -11,7 +11,7 @@ const YoutubeDataController = {
       });
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not get results!',
         error: err.message,
@@ -28,7 +28,7 @@ const YoutubeDataController = {
       });
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not get results!',
         error: err.message,
@@ -45,7 +45,7 @@ const YoutubeDataController = {
       });
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not get results!',
         error: err.message,
@@ -62,7 +62,7 @@ const YoutubeDataController = {
       });
       return res.json({ success: true, data });
     } catch (err) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         message: 'Could not get results!',
         error: err.message,

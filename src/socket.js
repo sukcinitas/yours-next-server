@@ -109,7 +109,6 @@ module.exports = (io) =>
           client.name === state[group].moderator &&
           state[group].activeMembers.length !== 0
         ) {
-          console.log(state[group].activeMembers);
           io.sockets
             .in(group)
             .emit('setModerator', { name: state[group].activeMembers[0].name });
