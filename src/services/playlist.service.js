@@ -5,10 +5,12 @@ const PlaylistService = {
     const playlists = await Playlist.find({ createdBy }).exec();
     return playlists;
   },
+
   async getPlaylist(id) {
     const playlist = await Playlist.findById(id).exec();
     return playlist;
   },
+
   async createPlaylist({ title, createdBy }) {
     const newPlaylist = new Playlist({
       title,
@@ -18,14 +20,17 @@ const PlaylistService = {
     await newPlaylist.save();
     return newPlaylist;
   },
+
   async deletePlaylist(id) {
     await Playlist.findByIdAndDelete(id).exec();
     return 'Playlist has been successfully deleted!';
   },
+
   async updatePlaylist({ id, item }) {
     await Playlist.updateOne({ _id: id }, { $addToSet: { items: item } }).exec();
     return;
   },
+
   async removeItemFromPlaylist({ id, items }) {
     const playlist = await Playlist.findById(id).exec();
     let newItems = playlist.items;

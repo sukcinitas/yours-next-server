@@ -1,4 +1,6 @@
 const router = require('express').Router();
+
+const authorize = require('../authorize');
 const PlaylistController = require('../controllers/playlist.controller');
 
 const catchErr = (f) => (req, res, next) =>
@@ -6,17 +8,17 @@ const catchErr = (f) => (req, res, next) =>
 
 router
   .route('/')
-  .get(catchErr(PlaylistController.getPlaylists))
-  .post(catchErr(PlaylistController.createPlaylist));
+  .get(authorize, catchErr(PlaylistController.getPlaylists))
+  .post(authorize, catchErr(PlaylistController.createPlaylist));
 
 router
   .route('/:id')
-  .get(catchErr(PlaylistController.getPlaylist))
-  .delete(catchErr(PlaylistController.deletePlaylist))
-  .put(catchErr(PlaylistController.updatePlaylist));
+  .get(authorize, catchErr(PlaylistController.getPlaylist))
+  .delete(authorize, catchErr(PlaylistController.deletePlaylist))
+  .put(authorize, catchErr(PlaylistController.updatePlaylist));
 
 router
   .route('/:id/removeItem')
-  .put(catchErr(PlaylistController.removeItemFromPlaylist));
+  .put(authorize, catchErr(PlaylistController.removeItemFromPlaylist));
 
 module.exports = router;

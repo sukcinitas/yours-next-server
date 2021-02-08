@@ -7,8 +7,9 @@ const GroupService = {
       passcode,
     });
     await newGroup.save();
-    return;
+    return newGroup;
   },
+
   async checkIfGroupExists(name) {
     const group = await Group.findOne({ name }, '-passcode').exec();
     if (group) {
@@ -16,6 +17,7 @@ const GroupService = {
     }
     return false;
   },
+
   async getGroupInfo(name) {
     const group = await Group.findOne({ name }).exec();
     return group;

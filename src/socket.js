@@ -3,6 +3,7 @@ module.exports = (io) =>
   io.on('connection', (socket) => {
     let client;
     let group;
+
     socket.on('getInitialState', (data) => {
       // when user authenticates/creates he joins the group's room
       group = data.name;
@@ -28,6 +29,7 @@ module.exports = (io) =>
           });
       }
     });
+
     socket.on('addMember', (data) => {
       if (state[group].activeMembers.length === 0) {
         state[group].moderator = data.name;
@@ -42,10 +44,12 @@ module.exports = (io) =>
         io.sockets.in(group).emit('addMember', data);
       }
     });
+
     // I only set member in sender
     socket.on('setMember', (data) => {
       client = data;
     });
+
     socket.on('sendMessage', (data) => {
       io.sockets.in(group).emit('sendMessage', data);
       if (state[group]) {
@@ -55,11 +59,13 @@ module.exports = (io) =>
         ];
       }
     });
+
     socket.on('updatePlaylists', (data) => {
       io.sockets
         .in(group)
         .emit('updatePlaylists', { playlists: data.playlists });
     });
+
     socket.on('updatePlaylist', (data) => {
       io.sockets.in(group).emit('updatePlaylist', {
         idsArray: data.idsArray,
@@ -69,9 +75,11 @@ module.exports = (io) =>
         id: data.id,
       });
     });
+
     socket.on('userJoinsOngoingPlaylist', () => {
       io.sockets.in(group).emit('userJoinsOngoingPlaylist');
     });
+
     socket.on('setOngoingPlaylist', (data) => {
       state[group].ongoingPlaylist.id = data.id;
       state[group].ongoingPlaylist.videoIndex = data.videoIndex;
@@ -81,17 +89,20 @@ module.exports = (io) =>
         .in(group)
         .emit('setOngoingPlaylist', state[group].ongoingPlaylist);
     });
+
     socket.on('changeOngoingPlaylistVideoIndex', (data) => {
       state[group].ongoingPlaylist.videoIndex = data.videoIndex;
       io.sockets.in(group).emit('changeOngoingPlaylistVideoIndex', {
         videoIndex: data.videoIndex,
       });
     });
+
     socket.on('toggleOngoingPlaylist', (data) => {
       io.sockets
         .in(group)
         .emit('toggleOngoingPlaylist', { paused: data.paused });
     });
+
     socket.on('disconnect', (reason) => {
       if (!group in state || !client) {
         return;
@@ -119,22 +130,8 @@ module.exports = (io) =>
         return;
       }
       }
-      // state[group].activeMembers = state[group].activeMembers.filter(
-      //   (member) => member.name !== client.name
-      // );
-      // io.sockets
-      //   .in(group)
-      //   .emit('removeMember', { client: client.name, emoji: client.emoji });
-      // if (
-      //   client.name === state[group].moderator &&
-      //   state[group].activeMembers.length !== 0
-      // ) {
-      //   io.sockets
-      //     .in(group)
-      //     .emit('setModerator', { name: state[group].activeMembers[0].name });
-      //   state[group].moderator = state[group].activeMembers[0].name;
-      // }
     });
+
     socket.on('setModerator', (name) => {
       io.sockets.in(group).emit('setModerator', { name });
     });

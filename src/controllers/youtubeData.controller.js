@@ -18,6 +18,7 @@ const YoutubeDataController = {
       });
     }
   },
+
   async getPlaylists(req, res) {
     try {
       const { channelId } = req.query;
@@ -35,6 +36,7 @@ const YoutubeDataController = {
       });
     }
   },
+
   async getPlaylistItems(req, res) {
     try {
       const { playlistId } = req.query;
@@ -52,6 +54,7 @@ const YoutubeDataController = {
       });
     }
   },
+
   async getVideos(req, res) {
     try {
       const { idList } = req.query;

@@ -14,6 +14,7 @@ const PlaylistController = {
       });
     }
   },
+
   async getPlaylist(req, res) {
     try {
       const { id } = req.params;
@@ -34,6 +35,7 @@ const PlaylistController = {
       });
     }
   },
+
   async createPlaylist(req, res) {
     try {
       const { title, createdBy } = req.body;
@@ -62,6 +64,7 @@ const PlaylistController = {
       });
     }
   },
+
   async deletePlaylist(req, res) {
     try {
       const { id } = req.params;
@@ -78,6 +81,7 @@ const PlaylistController = {
       });
     }
   },
+
   async updatePlaylist(req, res) {
     try {
       const { id } = req.params;
@@ -99,6 +103,7 @@ const PlaylistController = {
       });
     }
   },
+
   async removeItemFromPlaylist(req, res) {
     try {
       const { id } = req.params;
