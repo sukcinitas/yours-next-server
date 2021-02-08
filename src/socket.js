@@ -53,9 +53,29 @@ module.exports = (io) =>
     socket.on('sendMessage', (data) => {
       io.sockets.in(group).emit('sendMessage', data);
       if (state[group]) {
+        if (state[group].messages.length === 0) {
+          state[group].messages = [
+            ...state[group].messages,
+            { message: [data.message], member: data.member },
+          ];
+          return;
+        }
+    
+        let lastMessage = state[group].messages[state[group].messages.length - 1];
+        if (lastMessage.member.name === data.member.name &&
+            lastMessage.member.emoji === data.member.emoji) {
+          const messages = [...state[group].messages];
+          lastMessage = { member: lastMessage.member, message: [...lastMessage.message, data.message] };
+          messages[messages.length - 1] = lastMessage;
+          state[group].messages = [
+            ...messages,
+          ];
+          return;
+        }
+    
         state[group].messages = [
           ...state[group].messages,
-          { message: data.message, member: data.member },
+          { message: [data.message], member: data.member },
         ];
       }
     });
