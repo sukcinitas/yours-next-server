@@ -31,13 +31,14 @@ module.exports = (io) =>
     });
 
     socket.on('addMember', (data) => {
+      if (!(group in state) || !('activeMembers' in state[group])) {
+        return;
+      }
       if (state[group].activeMembers.length === 0) {
         state[group].moderator = data.name;
         socket.emit('setModerator', data);
       }
-      if (
-        state[group] &&
-        state[group].activeMembers.filter((member) => member.name === data.name)
+      if (state[group].activeMembers.filter((member) => member.name === data.name)
           .length < 1
       ) {
         state[group].activeMembers.push(data);
@@ -52,7 +53,7 @@ module.exports = (io) =>
 
     socket.on('sendMessage', (data) => {
       io.sockets.in(group).emit('sendMessage', data);
-      if (state[group]) {
+      if ((group in state)) {
         if (state[group].messages.length === 0) {
           state[group].messages = [
             ...state[group].messages,
@@ -101,6 +102,9 @@ module.exports = (io) =>
     });
 
     socket.on('setOngoingPlaylist', (data) => {
+      if(!(group in state)) {
+        return;
+      }
       state[group].ongoingPlaylist.id = data.id;
       state[group].ongoingPlaylist.videoIndex = data.videoIndex;
       state[group].ongoingPlaylist.time = data.time;
@@ -124,7 +128,7 @@ module.exports = (io) =>
     });
 
     socket.on('disconnect', (reason) => {
-      if (!group in state || !client) {
+      if (!(group in state) || !client) {
         return;
       }
       state[group].activeMembers = state[group].activeMembers.filter(
@@ -153,6 +157,10 @@ module.exports = (io) =>
     });
 
     socket.on('setModerator', (name) => {
+      if (!(group in state)) {
+        return;
+      }
       io.sockets.in(group).emit('setModerator', { name });
+      state[group].moderator = name;
     });
   });
