@@ -1,7 +1,7 @@
 # Yours Next
 
 An application to create shared playlists you can play using Youtube IFrame Player API and to chat in real-time using socket.io.
-You can take a look at the application [here](http://infinite-woodland-46117.herokuapp.com) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
+You can take a look at the application [here](http://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
 
 ---
 
@@ -34,7 +34,7 @@ You can take a look at the application [here](http://infinite-woodland-46117.her
 
 ## Setup
 
-- Check the app [here](http://infinite-woodland-46117.herokuapp.com) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up)
+- Check the app [here](https://yours-next.herokuapp.com/#/) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up)
 - or clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each -
   `npm install` (you will need `npm` and `node` installed globally); 
   <!-- set .env file using your mongo db uri and google api key. _MONGODB_URI_ and _GOOGLE_API_KEY_. -->
