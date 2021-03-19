@@ -4,6 +4,12 @@ const PlaylistController = {
   async getPlaylists(req, res) {
     try {
       const createdBy = req.query.group;
+      if (req.query.group !== req.user.name) {
+        return res.status(403).json({
+          success: false,
+          message: 'Forbidden! Could not get playlists!',
+        });
+      }
       const playlists = await PlaylistService.getPlaylists(createdBy);
       return res.json({ success: true, playlists });
     } catch (err) {
@@ -20,17 +26,16 @@ const PlaylistController = {
       const { id } = req.params;
       const playlist = await PlaylistService.getPlaylist(id);
       if (!playlist) {
-        return res.status(500).json({
+        return res.status(400).json({
           success: false,
-          message: 'Playlist has been deleted!',
-          error: err.message,
+          message: 'Could not get playlist or playlist has been deleted!',
         });
       }
       return res.json({ success: true, playlist });
     } catch (err) {
       return res.status(500).json({
         success: false,
-        message: 'Could not get playlist or playlist has been deleted!',
+        message: 'Could not get playlist!',
         error: err.message,
       });
     }
@@ -39,10 +44,16 @@ const PlaylistController = {
   async createPlaylist(req, res) {
     try {
       const { title, createdBy } = req.body;
+      if (createdBy !== req.user.name) {
+        return res.status(403).json({
+          success: false,
+          message: 'Forbidden!',
+        });
+      }
       const playlists = await PlaylistService.getPlaylists(createdBy);
       const playlistsTitles = playlists.map((playlist) => playlist.title);
       if (playlistsTitles.indexOf(title) > -1) {
-        return res.status(500).json({
+        return res.status(400).json({
           success: false,
           message: 'Playlist with this title already exists!',
         });
@@ -87,9 +98,9 @@ const PlaylistController = {
       const { id } = req.params;
       const { item } = req.body;
       if (!item) {
-        return res.status(500).json({
+        return res.status(400).json({
           success: false,
-          message: 'Could not update playlist!',
+          message: 'Bad request! Could not update playlist!',
         });
       }
       await PlaylistService.updatePlaylist({ id, item });
@@ -109,7 +120,7 @@ const PlaylistController = {
       const { id } = req.params;
       const { items } = req.body;
       if (items.length === 0) {
-        return res.status(500).json({ success: false, message: 'No item(s) to delete!' });
+        return res.status(400).json({ success: false, message: 'No item(s) to delete!' });
       }
       await PlaylistService.removeItemFromPlaylist({ id, items });
       return res.json({

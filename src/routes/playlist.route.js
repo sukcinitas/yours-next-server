@@ -3,8 +3,7 @@ const router = require('express').Router();
 const authorize = require('../authorize');
 const PlaylistController = require('../controllers/playlist.controller');
 
-const catchErr = (f) => (req, res, next) =>
-  f(req, res).catch((err) => next(err));
+const catchErr = (f) => (req, res, next) => f(req, res).catch((err) => next(err));
 
 router
   .route('/')

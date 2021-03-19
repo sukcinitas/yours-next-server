@@ -35,7 +35,7 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); 
+app.use(express.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -48,11 +48,11 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
+    'Origin, X-Requested-With, Content-Type, Accept',
   );
   res.header(
     'Access-Control-Allow-Method',
-    'GET, POST, PUT, PATCH, POST, DELETE, HEAD, OPTIONS'
+    'GET, POST, PUT, PATCH, POST, DELETE, HEAD, OPTIONS',
   );
   res.header('Access-Control-Max-Age', 86400);
   next();

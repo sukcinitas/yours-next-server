@@ -8,13 +8,14 @@ const GroupController = {
     try {
       const { name, passcode } = req.body;
       if (!name || !passcode) {
-        return res.status(500).json({
+        return res.status(400).json({
           success: false,
           type: 'general',
-          message: 'Failed to create the group!',
+          message: 'Bad request! Failed to create the group!',
         });
       }
-      if (await GroupService.checkIfGroupExists(name)) {
+      const doesGroupExist = await GroupService.checkIfGroupExists(name);
+      if (doesGroupExist) {
         return res.status(500).json({
           success: false,
           type: 'name',
@@ -28,12 +29,12 @@ const GroupController = {
             success: false,
             message: 'Authentication failed!',
             type: 'general',
-        });
+          });
         }
-        return res.json({
-          success: true,
-          message: 'Group has been successfully created!',
-        });
+      });
+      return res.json({
+        success: true,
+        message: 'Group has been successfully created!',
       });
     } catch (err) {
       return res.status(500).json({
@@ -49,15 +50,15 @@ const GroupController = {
     try {
       return passport.authenticate('local', { session: true }, (err, group) => {
         if (err) {
-          const { message, type } = err;
-          return res.status(500).json({
+          const { message, type, status } = err;
+          return res.status(status).json({
             success: false,
             message,
             type,
-        });
+          });
         }
         if (!group) {
-          return res.status(500).json({
+          return res.status(401).json({
             success: false,
             message: 'Username or password is incorrect!',
             type: 'general',
@@ -69,12 +70,12 @@ const GroupController = {
               success: false,
               message: 'Authentication failed!',
               type: 'general',
-          });
+            });
           }
-          return res.json({
-            success: true,
-            message: 'Authentication succeeded!',
-          });
+        });
+        return res.json({
+          success: true,
+          message: 'Authentication succeeded!',
         });
       })(req, res, next);
     } catch (err) {

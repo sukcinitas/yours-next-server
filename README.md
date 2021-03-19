@@ -5,11 +5,11 @@ You can take a look at the application [here](http://infinite-woodland-46117.her
 
 ---
 
-## Technologies
+## Built with
 
-##### Front-end [yours-next-client](https://github.com/sukcinitas/yours-next-client)
+#### Front-end [yours-next-client](https://github.com/sukcinitas/yours-next-client)
 
-##### Back-end
+#### Back-end
 
 - Node & Express
 - MongoDB & Mongoose
@@ -17,14 +17,17 @@ You can take a look at the application [here](http://infinite-woodland-46117.her
 - Bcryptjs
 - Socket.io
 
-##### APIs
+#### APIs
 
 - Youtube IFrame Player API
 - Youtube Data API
 
-##### Testing & linting
+#### Testing
 
 - Jest
+
+#### Linting
+
 - ESLint (Airbnb style guide)
 
 ---
@@ -33,37 +36,285 @@ You can take a look at the application [here](http://infinite-woodland-46117.her
 
 - Check the app [here](http://infinite-woodland-46117.herokuapp.com) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up)
 - or clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each -
-  `npm install` (you will need `npm` and `node` installed globally); set .env file using your _MONGODB_URI_ and _GOOGLE_API_KEY_.
+  `npm install` (you will need `npm` and `node` installed globally); 
+  <!-- set .env file using your mongo db uri and google api key. _MONGODB_URI_ and _GOOGLE_API_KEY_. -->
 
   - `npm run dev` - to run the app on [localhost:8080](http://localhost:8080/)
 
-- to initialize and fetch all submodule data - `cd client`, `git submodule init`, `git submodule update`.
+- to initialize submodule and fetch all its data - `cd client`, `git submodule init`, `git submodule update`.
 
 ---
 
+## Endpoints
+
 ### /api/group
 
-| route                   | HTTP method |      req.body      | result                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ----------------------- | :---------: | :----------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| /api/group/create       |    POST     | `{name, passcode}` | <ul><li>`{ success: false, message: 'Failed to create the group!'}` if recieves no name and/or passcode or otherwise fails</li><li>`{ success: false, message: 'Name is already in use!'}` if name is already used</li><li>`{ success: true, message: 'Group has been successfully created! }` if operation is successful</li></ul>                                                                                            |
-| /api/group/authenticate |    POST     | `{name, passcode}` | <ul><li>`{ success: false, message: 'Authentication failed!'}` if recieves no name and/or passcode or otherwise fails</li><li>`{ success: false, message: 'Group with this name is not found!'}` if group is not in the database</li><li>`{ success: false, message: 'Passcode is incorrect!'}` if passcode is incorrect</li><li>`{ success: true, message: 'Authentication succeeded! }` if operation is successful</li></ul> |
+<table>
+  <tr>
+    <th>URL & HTTP method</th>
+    <th>Parameters | req body</th>
+    <th>Response</th>
+  </tr>
+  <tr>
+    <td>/api/group/create <code>POST</code></td>
+    <td>
+      Request body:
+      <ul>
+        <li><code>{ name: <em>string</em>, passcode: <em>string</em> }</code></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, message: 'Group has been successfully created!' }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>400</code> <code>{ success: false, type: 'general', 'message': 'Bad request! Failed to create the group!' }</code></li>
+        <li><code>400</code> <code>{ success: false, type: 'name', message: 'Name is already in use!' }</code></li>
+        <li><code>500</code> <code>{ success: false, type: 'general', message: 'Authentication failed!' }</code></li>
+        <li><code>500</code> <code>{ success: false, type: 'general', message: 'Failed to create the group!' }</code></li>
+        <li><code>500</code> <code>{ success: false, type: 'general', message: 'Failed to create the group!' err: [<em>error message</em>] }</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>/api/group/authenticate <code>POST</code></td>
+    <td>
+      Request body:
+      <ul>
+        <li><code>{ name: <em>string</em>, passcode: <em>string</em> }</code></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, message: 'Authentication succeeded!' }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>400</code> <code>{ success: false, type: 'general', message: 'Bad request! Authentication failed!' }</code></li>
+        <li><code>401</code> <code>{ success: false, type: 'name', message: 'Group with this name is not found!' }</code></li>
+        <li><code>401</code> <code>{ success: false, type: 'passcode', message: 'Passcode is incorrect!' }</code></li>
+        <li><code>500</code> <code>{ success: false, type: 'general', message: 'Authentication failed!' }</code></li>
+        <li><code>500</code> <code>{ success: false, type: 'general', message: 'Authentication failed!!' err: [<em>error message</em>] }</code></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ### /api/data
 
-| route                                          | HTTP method |                     req.query                      | result                                                                                                                                                                                              |
-| ---------------------------------------------- | :---------: | :------------------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| /api/data/search?q=&pageToken=                 |     GET     |               `{q}` - a search query               | <ul><li>`{ success: true, data }` if operation is successful</li><li>`{ success: false, message: 'Could not get results!', error: '[youtube data api error message]' }` if operation fails</li><ul> |
-| /api/data/playlists?channelId=&pageToken=      |     GET     |                         -                          | <ul><li>`{ success: true, data }` if operation is successful</li><li>`{ success: false, message: 'Could not get results!', error: '[youtube data api error message]' }` if operation fails</li><ul> |
-| /api/data/playlistItems?playlistId=&pageToken= |     GET     |                         -                          | <ul><li>`{ success: true, data }` if operation is successful</li><li>`{ success: false, message: 'Could not get results!', error: '[youtube data api error message]' }` if operation fails</li><ul> |
-| /api/data/videos?idList=&pageToken=            |     GET     | `{idList}` - a string of comma separated video ids | <ul><li>`{ success: true, data }` if operation is successful</li><li>`{ success: false, message: 'Could not get results!', error: '[youtube data api error message]' }` if operation fails</li><ul> |
+<!-- DATA -->
+
+<table>
+  <tr>
+    <th>URL & HTTP method</th>
+    <th>Parameters | req body</th>
+    <th>Response</th>
+  </tr>
+  <tr>
+    <td>/api/data/search <code>GET</code></td>
+    <td>
+      Query parameters:
+      <ul>
+        <li><code>q</code>  <em>string required</em></li>
+        <li><code>pageToken</code> <em>string optional</em></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+        <li><code>200</code> <code>{ success: true, data: [Data] }</code></li>
+      </ul>
+      Error response:
+      <ul>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get results!', error: '[<em>youtube data api error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>/api/group/playlists <code>GET</code></td>
+    <td>
+      Query parameters:
+      <ul>
+        <li><code>channelId</code>  <em>string required</em></li>
+        <li><code>pageToken</code>  <em>string optional</em></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, data: [Data] }</code></li>
+      </ul>
+      Error response:
+      <ul>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get results!', error: '[<em>youtube data api error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>/api/group/playlistItems <code>GET</code></td>
+    <td>
+      Query parameters:
+      <ul>
+        <li><code>playlistId</code>  <em>string required</em></li>
+        <li><code>pageToken</code>  <em>string optional</em></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, data: [Data] }</code></li>
+      </ul>
+      Error response:
+      <ul>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get results!', error: '[<em>youtube data api error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>/api/group/videos <code>GET</code></td>
+    <td>
+      Query parameters:
+      <ul>
+        <li><code>idList</code>  <em>string required</em></li>
+        <li><code>pageToken</code>  <em>string optional</em></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, data: [Data] }</code></li>
+      </ul>
+      Error response:
+      <ul>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get results!', error: '[<em>youtube data api error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ### /api/playlists
 
-| route                         | HTTP method |       req.body       | result                                                                                                                                                                                                                                                                                                                                                                          |
-| ----------------------------- | :---------: | :------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| /api/playlists?group=         |     GET     |          -           | <ul><li>`{ success: true, playlists: [{_id: '', title: '', createdBy: 'group-name', items: ['videoId1'], createdAt: '', updatedAt: '' }] }` if operation is successful</li><li>`{ success: false, message: 'Could not get playlists!', error: '[database error message]' }` if operation fails</li></ul>                                                                        |
-| /api/playlists                |    POST     | `{title, createdBy}` | <ul><li>`{ success: true, playlist, message: 'Playlist has been successfully created!' }` if operation is successful</li><li>`{ success: false, message: 'Could not create playlist!', error: '[database error message]' }` if operation fails</li><li>`{ success: false, message: 'Playlist with this title already exists!'}` if same title playlist already exists</li></ul> |
-| /api/playlists/:id            |     GET     |          -           | <ul><li>`{ success: true, playlist: {_id: '', title: '', createdBy: 'group-name', items: ['videoId1'], createdAt: '', updatedAt: '' } }` if operation is successful</li><li>`{ success: false, message: 'Could not get playlist!', error: '[database error message]'}` if operation fails</li></ul>                                                                             |
-| /api/playlists/:id            |   DELETE    |          -           | <ul><li>`{ success: true, message: 'Playlist has been successfully deleted!' }` if operation is successful</li><li>`{ success: false, message: 'Could not delete playlist!', error: '[database error message]'}` if operation fails</li></ul>                                                                                                                                   |
-| /api/playlists/:id            |     PUT     |          -           | <ul><li>`{ success: false, message: 'Could not update playlist!' }` if no item is provided</li><li>`{ success: true, playlist }` if operation is successful</li><li>`{ success: false, message: 'Could not update playlist!', error: '[database error message]' }` if operation fails</li></ul>                                                                                 |
-| /api/playlists/:id/removeItem |     PUT     |          -           | <ul><li>`{ success: false, message: 'No item(s) to delete!' }` if no item(s) are provided</li><li>`{ success: true, message: 'Item(s) has been successfully deleted!' }` if operation is successful</li><li>`{ success: false, message: 'Could not delete playlist item(s)!', error: '[database error message]' }` if operation fails</li></ul>                                 |
+<table>
+  <tr>
+    <th>URL & HTTP method</th>
+    <th>Parameters | req body</th>
+    <th>Response</th>
+  </tr>
+  <tr>
+    <td>/api/playlists <code>GET</code></td>
+    <td>
+      Query parameters:
+      <ul>
+        <li><code>group</code> <em>string required</em></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, playlists: [ {_id: <em>string</em>, title: <em>string</em>, createdBy: <em>string</em>, items: <em>string[]</em>, createdAt: <em>string</em>, updatedAt: <em>string</em> }] }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>403</code> <code>{ success: false, message: 'Forbidden! Could not get playlists!' }</code></li>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get playlists!', error: '[<em>database error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>/api/playlists <code>POST</code></td>
+    <td>
+    Request body:
+      <ul>
+        <li><code>{ title: <em>string</em>, createdBy: <em>string</em> }</code></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, 'message': 'Playlist has been successfully created!', playlist: {_id: <em>string</em>, title: <em>string</em>, createdBy: <em>string</em>, items: <em>string[]</em>, createdAt: <em>string</em>, updatedAt: <em>string</em> } }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>403</code> <code>{ success: false, message: 'Forbidden!' }</code></li>
+        <li><code>400</code> <code>{ success: false, message: 'Playlist with this title already exists!'}</code></li>
+        <li><code>500</code> <code>{ success: false, message: 'Could not create playlist!', error: '[<em>database error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+    <tr>
+    <td>/api/playlists/:id <code>GET</code></td>
+    <td>
+      none
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, playlist: {_id: <em>string</em>, title: <em>string</em>, createdBy: <em>string</em>, items: <em>string[]</em>, createdAt: <em>string</em>, updatedAt: <em>string</em> } }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>400</code> <code>{ success: false, message: 'Could not get playlist or playlist has been deleted!' }</code></li>
+        <li><code>500</code> <code>{ success: false, message: 'Could not get playlist!', error: '[<em>database error message</em>]'}</code></li>
+      </ul>
+    </td>
+  </tr>
+    <tr>
+    <td>/api/playlists/:id <code>DELETE</code></td>
+    <td>
+        none
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, message: 'Playlist has been successfully deleted!' }</code></li>
+      </ul>
+      Error response:
+      <ul>
+        <li><code>500</code> <code>{ success: false, message: 'Could not delete playlist!', error: '[<em>database error message</em>]'}</code></li>
+      </ul>
+    </td>
+  </tr>
+    <tr>
+    <td>/api/playlists/:id <code>PUT</code></td>
+    <td>
+      Request body:
+      <ul>
+        <li><code>{ item: <em>string</em> }</code></li>
+      </ul>
+    </td>
+    <td>
+      Success responses: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, playlist: {_id: <em>string</em>, title: <em>string</em>, createdBy: <em>string</em>, items: <em>string[]</em>, createdAt: <em>string</em>, updatedAt: <em>string</em> } }</code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>400</code> <code>{ success: false, message: 'Bad request! Could not update playlist!' }</code></li>
+        <li><code>500</code> <code>{ success: false, message: 'Could not update playlist!', error: '[<em>database error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+    <tr>
+    <td>/api/playlists/:id/removeItem <code>PUT</code></td>
+    <td>
+      Request body:
+      <ul>
+        <li><code>{ items: <em>string[]</em> }</code></li>
+      </ul>
+    </td>
+    <td>
+      Success response: 
+      <ul>
+          <li><code>200</code> <code>{ success: true, message: 'Item(s) has been successfully deleted!' </code></li>
+      </ul>
+      Error responses:
+      <ul>
+        <li><code>400</code> <code>{ success: false, message: 'No item(s) to delete!' }</code></li>
+        <li><code>500</code> <code>{ success: false, message: 'Could not delete playlist item(s)!', error: '[<em>database error message</em>]' }</code></li>
+      </ul>
+    </td>
+  </tr>
+</table>

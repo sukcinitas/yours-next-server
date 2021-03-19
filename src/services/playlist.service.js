@@ -28,13 +28,12 @@ const PlaylistService = {
 
   async updatePlaylist({ id, item }) {
     await Playlist.updateOne({ _id: id }, { $addToSet: { items: item } }).exec();
-    return;
   },
 
   async removeItemFromPlaylist({ id, items }) {
     const playlist = await Playlist.findById(id).exec();
     let newItems = playlist.items;
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i += 1) {
       newItems = newItems.filter((video) => video !== items[i]);
     }
     playlist.items = newItems;

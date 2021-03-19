@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { hashSync } = require('bcryptjs');
+
 const groupSchema = new mongoose.Schema({
   name: {
     type: String,

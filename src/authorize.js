@@ -5,4 +5,4 @@ const authorize = (req, res, next) => {
   return next();
 };
 
-module.exports  = authorize;
+module.exports = authorize;

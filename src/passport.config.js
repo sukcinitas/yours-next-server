@@ -8,40 +8,48 @@ const GroupService = require('./services/group.service');
 passport.use(
   new LocalStrategy({
     usernameField: 'name',
-    passwordField: 'passcode'
+    passwordField: 'passcode',
   }, async (name, passcode, done) => {
     try {
       if (!name || !passcode) {
-        return done({
-          message: 'Authentication failed!',
+        done({
+          message: 'Bad request! Authentication failed!',
           type: 'general',
+          status: 400,
         }, false);
+        return;
       }
       const group = await GroupService.getGroupInfo(name);
       if (!group) {
-        return done({
+        done({
           message: 'Group with this name is not found!',
           type: 'name',
+          status: 401,
         }, false);
+        return;
       }
       if (compareSync(passcode, group.passcode)) {
-        return done(null, group);
-      }
-      return done({
+        done(null, group);
+        return;
+      } 
+      done({
         message: 'Passcode is incorrect!',
         type: 'passcode',
+        status: 401,
       }, false);
+      return;
     } catch (err) {
-      return done( {
+      done({
         message: 'Authentication failed!',
         type: 'general',
+        status: 500,
       }, false);
     }
   }),
 );
 
-passport.serializeUser((group, done)=> {
-  done(null, group._id);
+passport.serializeUser((group, done) => {
+  done(null, group.id);
 });
 
 passport.deserializeUser((_id, done) => {
