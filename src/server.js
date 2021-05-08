@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const http = require('http');
 const socketIO = require('socket.io');
+const cors = require('cors');
 
 const app = require('./app');
 const useSocket = require('./socket');
@@ -22,6 +23,7 @@ connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
 });
 
+app.use(cors());
 useSocket(io);
 
 app.use((err, req, res) => {
