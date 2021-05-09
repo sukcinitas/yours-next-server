@@ -23,7 +23,9 @@ connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
 });
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8080',
+}));
 useSocket(io);
 
 app.use((err, req, res) => {
