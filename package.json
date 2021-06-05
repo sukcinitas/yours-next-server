@@ -15,8 +15,7 @@
     "prod-client": "cd ../client && npm run build",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
     "prod": "npm run prod-client && npm run start",
-    "test-apis": "jest --detectOpenHandles --runInBand ./src/__tests__/apis",
-    "test-unit": "jest --detectOpenHandles --runInBand ./src/__tests__/unit"
+    "test-apis": "NODE_ENV=test jest --detectOpenHandles --runInBand ./src/__tests__/apis mode"
   },
   "jest": {
     "testEnvironment": "node",

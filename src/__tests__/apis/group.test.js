@@ -6,7 +6,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
   mongoose.Promise = Promise;
-  mongoose.connect(process.env.MONGODB_URI, {
+  mongoose.connect(process.env.MONGODB_URI_TEST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -40,7 +40,7 @@ describe('Test the /api/group/create path', () => {
     const response = await request(app)
       .post('/api/group/create')
       .send({ name: 'name', passcode: 'passcode' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Name is already in use!');
   });
@@ -49,11 +49,11 @@ describe('Test the /api/group/create path', () => {
     const response = await request(app)
       .post('/api/group/create')
       .send({ name: 'other name' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',
-      'Failed to create the group!'
+      'Bad request! Failed to create the group!'
     );
   });
 });
@@ -75,7 +75,7 @@ describe('Test the /api/group/authenticate path', () => {
     const response = await request(app)
       .post('/api/group/authenticate')
       .send({ name: 'other name', passcode: 'passcode' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',
@@ -87,15 +87,15 @@ describe('Test the /api/group/authenticate path', () => {
     const response = await request(app)
       .post('/api/group/authenticate')
       .send({ name: 'name', passcode: 'incorrectPasscode' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Passcode is incorrect!');
   });
 
   test('It should send a response to the POST method, when authentication fails', async () => {
     const response = await request(app).post('/api/group/authenticate').send();
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Authentication failed!');
+    expect(response.body).toHaveProperty('message', 'Username or password is incorrect!');
   });
 });

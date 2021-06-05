@@ -7,7 +7,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
   mongoose.Promise = Promise;
-  mongoose.connect(process.env.MONGODB_URI, {
+  mongoose.connect(process.env.MONGODB_URI_TEST, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -62,7 +62,7 @@ describe('Test the /api/playlists path', () => {
     const response = await request(app)
       .post('/api/playlists')
       .send({ title: 'title2' });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',
@@ -72,12 +72,11 @@ describe('Test the /api/playlists path', () => {
 });
 
 describe('Test the /api/playlists/:id/removeItem path', () => {
-  // const id = (await Playlist.find({ createdBy: 'name' }))[0]._id;
   test('It should send a response to the PUT method, when unsuccessful', async () => {
     const response = await request(app)
       .put(`/api/playlists/0/removeItem`)
       .send({ items: ['videoId3'] });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',
@@ -90,7 +89,7 @@ describe('Test the /api/playlists/:id/removeItem path', () => {
     const response = await request(app)
       .put(`/api/playlists/${id}/removeItem`)
       .send({ items: [] });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'No item(s) to delete!');
   });
@@ -124,7 +123,7 @@ describe('Test the /api/playlists/:id path', () => {
 
   test('It should send a response to the GET method, when unsuccessful', async () => {
     const response = await request(app).get(`/api/playlists/1`);
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Could not get playlist!');
   });
@@ -148,11 +147,11 @@ describe('Test the /api/playlists/:id path', () => {
 
   test('It should send a response to the PUT method, when unsuccessful', async () => {
     const response = await request(app).put('/api/playlists/1').send({});
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',
-      'Could not update playlist!'
+      'Bad request! Could not update playlist!'
     );
   });
 
@@ -169,7 +168,7 @@ describe('Test the /api/playlists/:id path', () => {
 
   test('It should send a response to the DELETE method, when unsuccessful', async () => {
     const response = await request(app).delete('/api/playlists/1');
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
       'message',

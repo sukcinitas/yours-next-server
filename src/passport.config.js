@@ -31,7 +31,7 @@ passport.use(
       if (compareSync(passcode, group.passcode)) {
         done(null, group);
         return;
-      } 
+      }
       done({
         message: 'Passcode is incorrect!',
         type: 'passcode',

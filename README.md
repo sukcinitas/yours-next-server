@@ -7,9 +7,9 @@ You can take a look at the application [here](http://yours-next.herokuapp.com/#/
 
 ## Built with
 
-#### Front-end [yours-next-client](https://github.com/sukcinitas/yours-next-client)
+### Front-end [yours-next-client](https://github.com/sukcinitas/yours-next-client)
 
-#### Back-end
+### Back-end
 
 - Node & Express
 - MongoDB & Mongoose
@@ -37,11 +37,18 @@ You can take a look at the application [here](http://yours-next.herokuapp.com/#/
 - Check the app [here](https://yours-next.herokuapp.com/#/) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up)
 - or clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each -
   `npm install` (you will need `npm` and `node` installed globally); 
-  <!-- set .env file using your mongo db uri and google api key. _MONGODB_URI_ and _GOOGLE_API_KEY_. -->
 
   - `npm run dev` - to run the app on [localhost:8080](http://localhost:8080/)
 
 - to initialize submodule and fetch all its data - `cd client`, `git submodule init`, `git submodule update`.
+
+---
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`MONGODB_URI`, `SESS_SECRET`, `GOOGLE_API_KEY`
 
 ---
 
