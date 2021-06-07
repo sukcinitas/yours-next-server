@@ -34,13 +34,12 @@ You can take a look at the application [here](http://yours-next.herokuapp.com/#/
 
 ## Setup
 
-- Check the app [here](https://yours-next.herokuapp.com/#/) (it takes ~ 10 seconds for the sleeping app on Heroku to wake up)
-- or clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each -
+Clone these repositories - `git clone https://github.com/sukcinitas/yours-next-server.git server`, `git clone https://github.com/sukcinitas/yours-next-client.git client`; install dependencies of each -
   `npm install` (you will need `npm` and `node` installed globally); 
 
   - `npm run dev` - to run the app on [localhost:8080](http://localhost:8080/)
 
-- to initialize submodule and fetch all its data - `cd client`, `git submodule init`, `git submodule update`.
+- to initialize submodule inside server directory and fetch all its data - `cd client`, `git submodule init`, `git submodule update`.
 
 ---
 
