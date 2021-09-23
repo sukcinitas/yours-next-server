@@ -12,12 +12,7 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 const uri = process.env.MONGODB_URI;
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+mongoose.connect(uri);
 const { connection } = mongoose;
 connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
