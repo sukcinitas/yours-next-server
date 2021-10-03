@@ -47,7 +47,7 @@ Clone these repositories - `git clone https://github.com/sukcinitas/yours-next-s
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`MONGODB_URI`, `SESS_SECRET`, `GOOGLE_API_KEY`
+`MONGODB_URI`, `SESSION_SECRET`, `GOOGLE_API_KEY`
 
 ---
 
