@@ -1,7 +1,7 @@
 # Yours Next
 
-An application to create shared playlists you can play using Youtube IFrame Player API and to chat in real-time using socket.io.
-You can take a look at the application [here](http://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
+An application to create shared playlists, play videos in a regular or synchronised manner via embedded Youtube video player and to chat in real-time using socket.io. 
+You can take a look at the application demo [here](https://yours-next.herokuapp.com/#/) (it might take ~ 10 seconds for the sleeping app on Heroku to wake up).
 
 ---
 
@@ -45,7 +45,7 @@ Clone these repositories - `git clone https://github.com/sukcinitas/yours-next-s
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project you will need to add the following environment variables to your .env file
 
 `MONGODB_URI`, `SESSION_SECRET`, `GOOGLE_API_KEY`
 
