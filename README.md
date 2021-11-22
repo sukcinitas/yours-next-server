@@ -324,3 +324,9 @@ To run this project, you will need to add the following environment variables to
     </td>
   </tr>
 </table>
+
+---
+
+## Aknowledgments
+
+- [Handling CORS in Socket.IO](https://socket.io/docs/v2/handling-cors/)

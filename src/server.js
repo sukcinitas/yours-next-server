@@ -9,7 +9,9 @@ const useSocket = require('./socket');
 require('dotenv').config();
 
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = process.env.NODE_ENV === 'production' ? socketIO(server, {allowRequest: (req, callback) => {    
+  callback(null, req.headers.origin === undefined); 
+}}) : socketIO(server);
 
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri);
@@ -18,9 +20,6 @@ connection.once('open', () => {
   console.log('Connection with MongoDB database established!');
 });
 
-app.use(cors({
-  origin: 'http://localhost:8080',
-}));
 useSocket(io);
 
 app.use((err, req, res) => {
