@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
 const http = require('http');
-const socketIO = require('socket.io');
+const Server = require('socket.io').Server;
 const cors = require('cors');
 
 const app = require('./app');
@@ -11,18 +11,23 @@ require('dotenv').config();
 const server = http.createServer(app);
 const io =
   process.env.NODE_ENV === 'production'
-    ? socketIO(server, {
+    ? 
+    new Server(server, {
         allowRequest: (req, callback) => {
           callback(null, req.headers.origin === undefined);
         },
       })
-    : socketIO(server, { origins: ['http://localhost:8080'] });
+    : 
+    new Server(server, {
+      cors: {
+        origin: '*'
+      }
+    });
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(
     cors({
-      credentials: true,
-      origin: 'http://localhost:8080/#',
+      origin: '*',
     })
   );
 }

@@ -39,7 +39,7 @@ Clone these repositories - `git clone https://github.com/sukcinitas/yours-next-s
 
   - `npm run dev` - to run the app on [localhost:8080](http://localhost:8080/)
 
-- to initialize submodule inside server directory and fetch all its data - `cd client`, `git submodule init`, `git submodule update`.
+<!-- - to initialize submodule inside server directory and fetch all its data - `cd client`, `git submodule init`, `git submodule update`. -->
 
 ---
 
