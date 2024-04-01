@@ -33,6 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const uri = process.env.MONGODB_URI;
+mongoose.set('strictQuery', false);
 mongoose.connect(uri);
 const { connection } = mongoose;
 connection.once('open', () => {

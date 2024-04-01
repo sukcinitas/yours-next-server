@@ -63,7 +63,7 @@ module.exports = (io) => io.on('connection', (socket) => {
 
       let lastMessage = state[group].messages[state[group].messages.length - 1];
       if (lastMessage.member.name === data.member.name
-            && lastMessage.member.emoji === data.member.emoji) {
+        && lastMessage.member.emoji === data.member.emoji) {
         const messages = [...state[group].messages];
         lastMessage = {
           member: lastMessage.member,
@@ -144,7 +144,7 @@ module.exports = (io) => io.on('connection', (socket) => {
     ) {
       if (
         client.name === state[group].moderator
-          && state[group].activeMembers.length !== 0
+        && state[group].activeMembers.length !== 0
       ) {
         io.sockets
           .in(group)
