@@ -1,6 +1,4 @@
 const passport = require('passport');
-
-require('../passport.config');
 const GroupService = require('../services/group.service');
 
 const GroupController = {
@@ -30,11 +28,12 @@ const GroupController = {
             message: 'Authentication failed!',
             type: 'general',
           });
+        } else {
+          return res.json({
+            success: true,
+            message: 'Group has been successfully created!',
+          });
         }
-      });
-      return res.json({
-        success: true,
-        message: 'Group has been successfully created!',
       });
     } catch (err) {
       return res.status(500).json({
@@ -59,7 +58,7 @@ const GroupController = {
         }
         if (!group) {
           return res.status(401).json({
-            success: false,
+         success: false,
             message: 'Username or password is incorrect!',
             type: 'general',
           });
@@ -71,11 +70,12 @@ const GroupController = {
               message: 'Authentication failed!',
               type: 'general',
             });
+          } else {
+            return res.json({
+              success: true,
+              message: 'Authentication succeeded!',
+            });
           }
-        });
-        return res.json({
-          success: true,
-          message: 'Authentication succeeded!',
         });
       })(req, res, next);
     } catch (err) {
@@ -110,10 +110,18 @@ const GroupController = {
 
   async logout(req, res) {
     try {
-      await req.logout();
-      return res.json({
-        success: true,
-        message: 'User has successfully logged out!',
+      await req.logout((err) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: 'Logout failed!',
+            error: err.message,
+          });
+        }
+        return res.json({
+          success: true,
+          message: 'User has successfully logged out!',
+        });
       });
     } catch (err) {
       return res.status(500).json({

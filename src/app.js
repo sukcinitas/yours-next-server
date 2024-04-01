@@ -11,6 +11,8 @@ const MongoStore = connectMongo(session);
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   session({
     key: 'cookie-yn',
@@ -33,9 +35,7 @@ app.use(
   }),
 );
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
+require('./passport.config');
 app.use(passport.initialize());
 app.use(passport.session());
 
