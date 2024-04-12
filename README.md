@@ -1,7 +1,7 @@
 # Yours Next
 
 An application to create shared playlists, play videos in a regular or synchronised manner via embedded Youtube video player and to chat in real-time using socket.io. 
-You can take a look at the application demo [here](https://fixed-bronzed-comma.glitch.me/) (hosted on Glitch, it might take some time for the sleeping app to wake up).
+You can take a look at the application demo [here](https://yours-next-server.onrender.com/) (hosted on Glitch, it might take some time for the sleeping app to wake up).
 
 ---
 
